@@ -44,23 +44,35 @@ a:hover {
 /* gallery styles */
 
 .dropdown > .btn {
-    z-index: 1;
-    margin: 0 15px 25px 0;
-    color: black;
     background-color: whitesmoke;
+    color: black;
+    margin: 0 15px 25px 0;
+    z-index: 1;
 }
 
-.card {
-    border: none;
+.figure-caption-container {
+    justify-content: center;
 }
 
-.card > img {
-    height: 300px;
-    object-fit: cover;
+.figure-caption {
+    margin: 0 7px;
+    text-align: center;
+    vertical-align: center;
 }
 
-.card-body {
-    padding: 5px;
+.photo-location {
+    font-weight: 450;
+}
+
+.photo-date {
+    font-style: italic;
+}
+
+.dot {
+    background: gray;
+    border-radius: 50%;
+    height: 5px;
+    width: 5px;
 }
 
 #gallery {
