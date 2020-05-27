@@ -1,9 +1,50 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+:root {
+    --navy: #1b2d45;
 }
 
-#greeting-container {
-  margin-top: 20px;
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+#content {
+    margin: 30px auto;
+    width: 80%;
+    max-width: 1200px;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    /* border: 2px solid red; */
+}
+
+#profile-img-container {
+    flex: 1;
+    margin: 10px 30px;
+    /* border: 2px solid #0056b3; */
+}
+
+#profile-img-container > img {
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    padding: 10px; 
+}
+
+#header-text-container {
+    flex: 3;
+    margin: 10px 30px;
+    /* border: 2px solid green; */
+}
+
+#header-text-container > h1 {
+    font-family: 'Dancing Script', cursive;
+    color: var(--navy);
 }
