@@ -11,6 +11,11 @@ a:hover {
     color: #0056b3;
 }
 
+.row {
+    align-items: center;
+    /* border: 2px solid red; */
+}
+
 #content {
     margin: 30px auto;
     max-width: 1200px;
@@ -18,32 +23,17 @@ a:hover {
 }
 
 #header {
-    align-items: center;
-    display: flex;
-    margin: 0 auto;
-    /* border: 2px solid red; */
+    max-width: 800px;
 }
 
-#profile-img-container {
-    flex: 1;
-    margin: 10px 30px;
-}
-
-#profile-img-container > img {
+#profile-img {
     border-radius: 50%;
     height: 200px;
     object-fit: cover;
-    padding: 10px; 
     width: 200px;
 }
 
-#header-text-container {
-    flex: 3;
-    margin: 10px 30px;
-    /* border: 2px solid green; */
-}
-
-#header-text-container > h1 {
+#title {
     color: var(--navy);
     font-family: 'Dancing Script', cursive, sans-serif;
 }
