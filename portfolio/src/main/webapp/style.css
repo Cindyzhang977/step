@@ -19,8 +19,11 @@ a:hover {
 #content {
     margin: 30px auto;
     max-width: 1200px;
+    padding: 30px 5px;
     width: 80%;
 }
+
+/* header styles */
 
 #header {
     max-width: 800px;
@@ -36,4 +39,30 @@ a:hover {
 #title {
     color: var(--navy);
     font-family: 'Dancing Script', cursive, sans-serif;
+}
+
+/* gallery styles */
+
+.dropdown > .btn {
+    z-index: 1;
+    margin: 0 15px 25px 0;
+    color: black;
+    background-color: whitesmoke;
+}
+
+.card {
+    border: none;
+}
+
+.card > img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 5px;
+}
+
+#gallery {
+    margin-top: 100px;
 }
