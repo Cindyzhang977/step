@@ -1,4 +1,4 @@
-[
+export default [
 	{
 		"location": "Pigeon Point",
 		"date": "Apr 26, 2020",
