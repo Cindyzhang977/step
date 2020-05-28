@@ -35,15 +35,19 @@ function createPhoto(photo) {
   return $(component.join(''));
 }
 
+const photoComponents = []
+photos_data.forEach(
+    (photo) => {
+        photoComponents.push(createPhoto(photo));
+    } 
+)
+
 /**
  * Map photos into gallery
  */
  function mapPhotos() {
-     photos_data.forEach(
-        (photo) => {
-            let component = createPhoto(photo);
-            $('#gallery').append(component);
-        } 
+     photoComponents.forEach(
+        (component) => { $('#gallery').append(component) } 
      )
  }
 
