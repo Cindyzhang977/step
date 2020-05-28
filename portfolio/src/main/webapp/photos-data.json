@@ -1,0 +1,21 @@
+[
+	{
+		"location": "Butterfly Beach",
+		"date": "Jan 4, 2020",
+        "src": "img/butterfly-beach.jpg",
+        "tags": ["beach", "sunset"]
+	},
+    {
+		"location": "Golden Gate Bridge",
+		"date": "Dec 22, 2019",
+        "src": "img/golden-gate.jpg",
+        "tags": ["beach", "sunset"]
+	},
+    {
+		"location": "Mission Peak",
+		"date": "Jun 6, 2017",
+        "src": "img/mission-peak.jpg",
+        "tags": ["mountain"]
+	}
+
+]
