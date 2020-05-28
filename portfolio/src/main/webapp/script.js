@@ -15,11 +15,36 @@
 // photos data
 import photos_data from './photos-data.js';
 
-photos_data.forEach(
-    (photo) => console.log(photo.location + " " + photo.date)
-)
+/**
+ * Create photo component with caption 
+ */
+function createPhoto(photo) {
+    let component = [
+        '<div class="col-4">',
+            '<figure class="figure">',
+                '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
+                '<div class="row figure-caption-container">',
+                    '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
+                    '<span class="dot"></span>',
+                    '<figcaption class="figure-caption photo-date">' + photo.date + '</figcaption>',
+                '</div>',
+            '</figure>',
+        '</div>'
+    ];
 
+  return $(component.join(''));
+}
 
 /**
- * Map photos to gallery 
+ * Map photos into gallery
  */
+ function mapPhotos() {
+     photos_data.forEach(
+        (photo) => {
+            let component = createPhoto(photo);
+            $('#gallery').append(component);
+        } 
+     )
+ }
+
+ mapPhotos();
