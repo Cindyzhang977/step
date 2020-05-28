@@ -16,13 +16,8 @@ a:hover {
     color: #0056b3;
 }
 
-.row {
-    align-items: center;
-    /* border: 2px solid red; */
-}
-
 #content {
-    margin: 30px auto;
+    margin: 32px auto;
     max-width: 1200px;
     padding: 30px 5px;
     width: 80%;
@@ -33,12 +28,13 @@ a:hover {
 #header {
     max-width: 800px;
 }
-
-#profile-img {
+#profile-img-container {
+    align-content: center;
     border-radius: 50%;
     height: 200px;
-    object-fit: cover;
+    margin: auto;
     width: 200px;
+    overflow: hidden;
 }
 
 #title {
@@ -58,6 +54,7 @@ a:hover {
 
 .figure-caption-container {
     justify-content: center;
+    align-items: center;
 }
 
 .figure-caption {
