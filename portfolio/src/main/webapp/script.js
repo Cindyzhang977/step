@@ -35,19 +35,25 @@ function createPhoto(photo) {
   return $(component.join(''));
 }
 
-const photoComponents = []
+const photoComponents = {}  //dictionary mapping id : photo component
 photos_data.forEach(
-    (photo) => {
-        photoComponents.push(createPhoto(photo));
+    (photo, index) => {
+        photo.id = index;
+        photoComponents[index] = createPhoto(photo);
     } 
 )
+
+//TODO: map over photos_data, filter with tags, query photoComponents with id 
 
 /**
  * Map photos into gallery
  */
- function mapPhotos() {
-     photoComponents.forEach(
-        (component) => { $('#gallery').append(component) } 
+ function mapPhotos(filter=null) {
+     photo_data.forEach(
+        (photo) => { 
+            if (filter && filter in photo.tags)
+                $('#gallery').append(component) 
+        } 
      )
  }
 
