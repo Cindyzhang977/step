@@ -2,6 +2,11 @@
     --navy: #1b2d45;
 }
 
+html,
+body {
+    background-color: #f7f7f0;
+}
+
 a {
     color: #007bff;
     text-decoration: none;
@@ -46,6 +51,7 @@ a:hover {
 .dropdown > .btn {
     background-color: whitesmoke;
     color: black;
+    border-color: gray;
     margin: 0 15px 25px 0;
     z-index: 1;
 }
