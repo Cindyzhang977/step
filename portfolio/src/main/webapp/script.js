@@ -87,25 +87,11 @@ function mapPhotos(filter=null, components=null) {
  * Order photos based on date
  */
 function sortPhotos(order="newest") {
-    console.log(order)
     let components = $('#gallery').contents().toArray()
-    console.log("before")
-    console.log(components)
-    if (order == "oldest") {
-        console.log("sort by oldest")
-        components.sort((component) => {
-            console.log(component.id)
-            return component.id
-        }).reverse()
-    } else {
-        console.log("sort by newest")
-        components.sort((component) => {
-            console.log(component.id)
-            return component.id
-        })
-    }
-    console.log("sorted comp")
-    console.log(components)
+    components.sort((component) => {
+        console.log(-component.id)
+        return -component.id
+    })
     mapPhotos(null, components)
 }
 
@@ -116,8 +102,8 @@ document.getElementById("filter-mountain").addEventListener("click", () => mapPh
 document.getElementById("filter-none").addEventListener("click", () => mapPhotos())
 
 // eventListeners for sorting photos
-$("#newest").click(() => sortPhotos("newest"))
-$("#oldest").click(() => sortPhotos("oldest"))
+$("#newest").click(() => $("#newest").attr("class").includes("active") ? sortPhotos("newest") : null)
+$("#oldest").click(() => $("#oldest").attr("class").includes("active") ? sortPhotos("oldest") : null)
 
 window.onload = () => {
     mapPhotos();

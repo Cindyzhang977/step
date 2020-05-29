@@ -26,14 +26,13 @@
         <div class="container" id="gallery-container">
             <div class="container">
                 <div class="row">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort By
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" id="newest">Newest</a>
-                            <a class="dropdown-item" id="oldest">Oldest</a>
-                        </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active" id="newest">
+                            <input type="radio" name="options" checked> Newest
+                        </label>
+                        <label class="btn btn-secondary" id="oldest">
+                            <input type="radio" name="options"> Oldest
+                        </label>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
