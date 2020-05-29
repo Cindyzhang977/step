@@ -22,7 +22,9 @@ function createPhoto(photo) {
   let component = [
       '<div id=' + photo.epoch + ' class="col-4">',
         '<figure class="figure">',
-          '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
+          '<div class="figure-img-container">',
+            '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
+          '</div>',
           '<div class="row figure-caption-container">',
             '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
             '<span class="dot"></span>',

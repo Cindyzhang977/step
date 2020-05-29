@@ -8,43 +8,38 @@ body {
 }
 
 a {
-    color: #007bff;
-    text-decoration: none;
+  color: #007bff;
+  text-decoration: none;
 }
 
 a:hover {
-    color: #0056b3;
-    cursor: pointer;
-}
-
-.row {
-    align-items: center;
-    /* border: 2px solid red; */
+  color: #0056b3;
+  cursor: pointer;
 }
 
 #content {
-    margin: 30px auto;
-    max-width: 1200px;
-    padding: 30px 5px;
-    width: 80%;
+  margin: 30px auto;
+  max-width: 1200px;
+  padding: 30px 5px;
+  width: 80%;
 }
 
 /* header styles */
 
 #header {
-    max-width: 800px;
+  max-width: 800px;
 }
 
 #profile-img {
-    border-radius: 50%;
-    height: 200px;
-    object-fit: cover;
-    width: 200px;
+  border-radius: 50%;
+  height: 200px;
+  object-fit: cover;
+  width: 200px;
 }
 
 #title {
-    color: var(--navy);
-    font-family: 'Dancing Script', cursive, sans-serif;
+  color: var(--navy);
+  font-family: 'Dancing Script', cursive, sans-serif;
 }
 
 /* gallery styles */
@@ -67,35 +62,44 @@ a:hover {
 }
 
 .btn-secondary.focus {
-    box-shadow: none;
+  box-shadow: none;
+}
+
+.figure-img-container {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 3px;
+  max-height: 420px;
 }
 
 .figure-caption-container {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: auto;
 }
 
 .figure-caption {
-    margin: 0 7px;
-    text-align: center;
-    vertical-align: center;
+  margin: 0 7px;
+  text-align: center;
+  vertical-align: center;
 }
 
 .photo-location {
-    font-weight: 450;
+  font-weight: 450;
 }
 
 .photo-date {
-    font-style: italic;
+  font-style: italic;
 }
 
 .dot {
-    background: gray;
-    border-radius: 50%;
-    height: 5px;
-    width: 5px;
+  background: gray;
+  border-radius: 50%;
+  height: 5px;
+  width: 5px;
 }
 
 #gallery-container {
-    margin-top: 100px;
+  margin-top: 100px;
 }
