@@ -16,6 +16,8 @@ import photosData from "./photos-data.js";
 
 /**
  * Create photo component with caption
+ * @param {Photo object} photo a Photo object that contains the data for a photo html component
+ * @return {html component}
  */
 function createPhoto(photo) {
   const component = `<div class="col-4"> \
