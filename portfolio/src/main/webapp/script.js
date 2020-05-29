@@ -21,21 +21,23 @@ import photos_data from './photos-data.js';
 function createPhoto(photo) {
     let component = [
         '<div class="col-4">',
-            '<figure class="figure">',
-                '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
-                '<div class="row figure-caption-container">',
-                    '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
-                    '<span class="dot"></span>',
-                    '<figcaption class="figure-caption photo-date">' + photo.date + '</figcaption>',
-                '</div>',
-            '</figure>',
+          '<figure class="figure">',
+            '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
+            '<div class="row figure-caption-container">',
+              '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
+              '<span class="dot"></span>',
+              '<figcaption class="figure-caption photo-date">' + photo.date + '</figcaption>',
+            '</div>',
+          '</figure>',
         '</div>'
     ];
 
   return $(component.join(''));
 }
 
-const photoComponents = {}  //dictionary mapping id : photo component
+//dictionary mapping id : photo component
+const photoComponents = {}
+
 photos_data.forEach(
     (photo, index) => {
         photo.id = index;
@@ -43,18 +45,26 @@ photos_data.forEach(
     } 
 )
 
-//TODO: map over photos_data, filter with tags, query photoComponents with id 
-
 /**
  * Map photos into gallery
  */
  function mapPhotos(filter=null) {
-     photo_data.forEach(
+     $('#gallery').empty();
+     photos_data.forEach(
         (photo) => { 
-            if (filter && filter in photo.tags)
-                $('#gallery').append(component) 
+            if (filter == null || photo.tags.includes(filter)) {
+                $('#gallery').append(photoComponents[photo.id]);
+            }
         } 
      )
  }
 
- mapPhotos();
+// eventListeners for filtering photos based on an attribute
+document.getElementById("filter-beach").addEventListener("click", () => mapPhotos("beach"));
+document.getElementById("filter-sunset").addEventListener("click", () => mapPhotos("sunset"));
+document.getElementById("filter-mountain").addEventListener("click", () => mapPhotos("mountain"));
+document.getElementById("filter-none").addEventListener("click", () => mapPhotos());
+
+window.onload = () => {
+    mapPhotos();
+};

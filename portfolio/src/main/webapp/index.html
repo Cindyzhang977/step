@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
   </head>
   <body>
     <div id="content">
@@ -40,10 +40,10 @@
                             Filter
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item">Beach</a>
-                            <a class="dropdown-item">Sunset</a>
-                            <a class="dropdown-item">Mountain</a>
-                            <a class="dropdown-item">-None-</a>
+                            <a class="dropdown-item" id="filter-beach">Beach</a>
+                            <a class="dropdown-item" id="filter-sunset">Sunset</a>
+                            <a class="dropdown-item" id="filter-mountain">Mountain</a>
+                            <a class="dropdown-item" id="filter-none">-- None --</a>
                         </div>
                     </div>
                 </div>
