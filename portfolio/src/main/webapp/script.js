@@ -67,8 +67,6 @@ photos_data.forEach(
 function mapPhotos(filter=null, components=null) {
     $('#gallery').empty()
     if (components != null) {
-        console.log("in map photos")
-        console.log(components)
         components.forEach(
             (component) => $('#gallery').append(component) 
         )
@@ -88,10 +86,7 @@ function mapPhotos(filter=null, components=null) {
  */
 function sortPhotos(order="newest") {
     let components = $('#gallery').contents().toArray()
-    components.sort((component) => {
-        console.log(-component.id)
-        return -component.id
-    })
+    components.sort((component) => -component.id)
     mapPhotos(null, components)
 }
 

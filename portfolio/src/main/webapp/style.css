@@ -49,12 +49,25 @@ a:hover {
 
 /* gallery styles */
 
-.dropdown > .btn {
-    background-color: whitesmoke;
-    color: black;
-    border-color: gray;
-    margin: 0 15px 25px 0;
-    z-index: 1;
+.filter-dropdown > .btn,
+.sort-toggle > .btn {
+  background-color: whitesmoke;
+  color: black;
+  border-color: gray;
+  z-index: 1;
+  margin-bottom: 30px;
+}
+
+.sort-toggle {
+  margin-right: 20px;
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active {
+  background-color: gray;
+}
+
+.btn-secondary.focus {
+    box-shadow: none;
 }
 
 .figure-caption-container {
