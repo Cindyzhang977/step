@@ -86,7 +86,11 @@ function mapPhotos(filter=null, components=null) {
  */
 function sortPhotos(order="newest") {
   let components = $('#gallery').contents().toArray()
-  components.sort((component) => -component.id)
+  if (order == "oldest") {
+    components.sort((a, b) => a.id - b.id)
+  } else {
+    components.sort((a, b) => b.id - a.id)
+  }
   mapPhotos(null, components)
 }
 
