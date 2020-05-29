@@ -18,20 +18,19 @@ import photosData from './photos-data.js';
  * Create photo component with caption 
  */
 function createPhoto(photo) {
-    const component = [
-      '<div class="col-4">',
-          '<figure class="figure">',
-              '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
-              '<div class="row figure-caption-container">',
-                  '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
-                  '<span class="dot"></span>',
-                  '<figcaption class="figure-caption photo-date">' + photo.date + '</figcaption>',
-              '</div>',
-          '</figure>',
-      '</div>'
-    ];
+    const component =
+      `<div class="col-4"> \
+          <figure class=\"figure\"> \
+              <img src=${photo.src} class=\"figure-img img-fluid rounded\" alt=${photo.location}> \
+              <div class=\"row figure-caption-container\"> \
+                  <figcaption class=\"figure-caption photo-location\">${photo.location}</figcaption> \
+                  <span class=\"dot\"></span> \
+                  <figcaption class=\"figure-caption photo-date\">${photo.date}</figcaption> \
+              </div> \
+          </figure> \
+      </div>`
 
-  return $(component.join(''));
+  return component
 }
 
 /**
@@ -40,7 +39,7 @@ function createPhoto(photo) {
  function mapPhotos() {
      photosData.forEach(
         (photo) => {
-            let component = createPhoto(photo);
+            const component = createPhoto(photo);
             $('#gallery').append(component);
         } 
      )
