@@ -60,26 +60,27 @@ photos_data.forEach(
     } 
 )
 
-
 /**
- * Map photos into gallery
+ * Map photos into gallery based on a filter if one is provided
  */
 function mapPhotos(filter=null, components=null) {
-    $('#gallery').empty()
-    if (components != null) {
-        components.forEach(
-            (component) => $('#gallery').append(component) 
-        )
-    } else {
-       photos_data.forEach(
-           (photo) => { 
-               if (filter == null || photo.tags.includes(filter)) {
-                   $('#gallery').append(photoComponents[photo.id])
-               }
-           } 
-       )
-    }   
- }
+  $('#gallery').empty()
+  if (components != null) {
+      components.forEach(
+          (component) => $('#gallery').append(component) 
+      )
+  } else {
+    photos_data.forEach(
+      (photo) => { 
+        if (filter == null || photo.tags.includes(filter)) {
+            $('#gallery').append(photoComponents[photo.id])
+        }
+      } 
+    )
+    $("#newest").button('toggle')
+    $("#oldest").button('dispose')
+  }   
+}
 
  /**
  * Order photos based on date
@@ -91,15 +92,16 @@ function sortPhotos(order="newest") {
 }
 
 // eventListeners for filtering photos based on an attribute
-document.getElementById("filter-beach").addEventListener("click", () => mapPhotos("beach"))
-document.getElementById("filter-sunset").addEventListener("click", () => mapPhotos("sunset"))
-document.getElementById("filter-mountain").addEventListener("click", () => mapPhotos("mountain"))
-document.getElementById("filter-none").addEventListener("click", () => mapPhotos())
+$("#filter-beach").click(() => mapPhotos("beach"))
+$("#filter-sunset").click(() => mapPhotos("sunset"))
+$("#filter-mountain").click(() => mapPhotos("mountain"))
+$("#filter-none").click(() => mapPhotos())
 
 // eventListeners for sorting photos
 $("#newest").click(() => $("#newest").attr("class").includes("active") ? sortPhotos("newest") : null)
 $("#oldest").click(() => $("#oldest").attr("class").includes("active") ? sortPhotos("oldest") : null)
 
 window.onload = () => {
-    mapPhotos();
+  mapPhotos()
+  sortPhotos()
 }
