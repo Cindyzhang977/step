@@ -1,10 +1,10 @@
 :root {
-    --navy: #1b2d45;
+  --navy: #1b2d45;
 }
 
 html,
 body {
-    background-color: #f7f7f0;
+  background-color: #f7f7f0;
 }
 
 a {
@@ -37,9 +37,9 @@ a:hover {
 #profile-img {
   border-radius: 50%;
   height: 200px;
+  margin: auto;
   object-fit: cover;
   width: 200px;
-  margin: auto;
 }
 
 #title {
@@ -53,10 +53,10 @@ a:hover {
 .filter-dropdown > .btn,
 .sort-toggle > .btn {
   background-color: whitesmoke;
-  color: black;
   border-color: gray;
-  z-index: 1;
+  color: black;
   margin-bottom: 30px;
+  z-index: 1;
 }
 
 .sort-toggle {
@@ -72,17 +72,17 @@ a:hover {
 }
 
 .figure-img-container {
-  width: 100%;
-  overflow: hidden;
   border-radius: 3px;
   max-height: 420px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .figure-caption-container {
-  justify-content: center;
   align-items: center;
-  width: 100%;
+  justify-content: center;
   margin: 6px auto;
+  width: 100%;
 }
 
 .figure-caption {
