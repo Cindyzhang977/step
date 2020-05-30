@@ -1,4 +1,13 @@
-export default [
+/**
+ * Object containing data for a photo
+ * @typedef {Object} Photo
+ * @property {string} location
+ * @property {string} date
+ * @property {string} src
+ * @property {string[]} tags 
+ */
+
+export const /** !Array<Photo> */ photosData = [
   {
     location: 'Pigeon Point',
     date: 'Apr 26, 2020',

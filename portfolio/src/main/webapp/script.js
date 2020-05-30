@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import photosData from "./photos-data.js";
+import { photosData } from "./photos-data.js";
 
 /**
  * Create photo component with caption
