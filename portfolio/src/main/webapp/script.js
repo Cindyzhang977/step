@@ -46,7 +46,7 @@ function createPhoto(photo) {
 // dictionary mapping id : photo component
 const photoComponents = {};
 
-const allComponents = []
+const allComponents = [];
 
 const monthToNum = {
   Jan: 0,
@@ -80,11 +80,11 @@ for (let index = 0; index < photosData.length; index++) {
   // create photo component
   let component = createPhoto(photo);
   photoComponents[index] = component;
-  allComponents.push(component)
+  allComponents.push(component);
 }
 
 /**
- * Map photos into gallery 
+ * Map photos into gallery
  * @param {string} components the list of specific photo components to display
  */
 function mapPhotos(components = allComponents) {
@@ -114,14 +114,14 @@ function sortPhotos(order = "newest") {
  * Filter photos to determine which ones to display
  * @param {string} filter the applied filter used to pick which photos to display
  */
-function filterPhotos(filter=null) {
-  let components = []
+function filterPhotos(filter = null) {
+  let components = [];
   for (const photo of photosData) {
     if (filter == null || photo.tags.includes(filter)) {
       components.push(photoComponents[photo.id]);
     }
   }
-  mapPhotos(components)
+  mapPhotos(components);
 }
 
 // eventListeners for filtering photos based on an attribute
