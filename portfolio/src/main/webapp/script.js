@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// photos data
-import photos_data from './photos-data.js'
+import { photosData } from "./photos-data.js";
 
 /**
- * Create photo component with caption 
+ * Create photo component with caption
+ * @param {Photo object} photo a Photo object that contains the data for a photo html component
+ * @return {html component}
  */
 function createPhoto(photo) {
-  let component = [
-      '<div id=' + photo.epoch + ' class="col-4">',
-        '<figure class="figure">',
-          '<img src=' + photo.src + ' class="figure-img img-fluid rounded" alt=' + photo.location + '>',
-          '<div class="row figure-caption-container">',
-            '<figcaption class="figure-caption photo-location">' + photo.location + '</figcaption>',
-            '<span class="dot"></span>',
-            '<figcaption class="figure-caption photo-date">' + photo.date + '</figcaption>',
-          '</div>',
-        '</figure>',
-      '</div>'
-  ]
-  return $(component.join(''))
+  const component = `<div class="col-4"> \
+          <figure class=\"figure\"> \
+              <img src=${photo.src} class=\"figure-img img-fluid rounded\" alt=${photo.location}> \
+              <div class=\"row figure-caption-container\"> \
+                  <figcaption class=\"figure-caption photo-location\">${photo.location}</figcaption> \
+                  <span class=\"dot\"></span> \
+                  <figcaption class=\"figure-caption photo-date\">${photo.date}</figcaption> \
+              </div> \
+          </figure> \
+      </div>`;
+
+  return component;
 }
 
 // dictionary mapping id : photo component
@@ -40,7 +40,7 @@ const photoComponents = {}
 const monthToNum = {"Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
                     "Jul": 6, "Aug": 7, "Sept": 8, "Oct": 9, "Nov": 10, "Dec": 11}
 
-photos_data.forEach(
+photosData.forEach(
   (photo, index) => {
       // add index id to each photo
       photo.id = index
@@ -69,7 +69,7 @@ function mapPhotos(filter=null, components=null) {
         (component) => $('#gallery').append(component) 
       )
   } else {
-    photos_data.forEach(
+    photosData.forEach(
       (photo) => { 
         if (filter == null || photo.tags.includes(filter)) {
           $('#gallery').append(photoComponents[photo.id])
@@ -108,3 +108,10 @@ window.onload = () => {
   mapPhotos()
   sortPhotos()
 }
+
+// function mapPhotos() {
+//   for (const photo of photosData) {
+//     const component = createPhoto(photo);
+//     $("#gallery").append(component);
+//   }
+// }
