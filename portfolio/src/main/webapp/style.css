@@ -13,8 +13,8 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
-    cursor: pointer;
+  color: #0056b3;
+  cursor: pointer;
 }
 
 #content {
@@ -49,10 +49,10 @@ a:hover {
 .filter-dropdown > .btn,
 .sort-toggle > .btn {
   background-color: whitesmoke;
-  color: black;
   border-color: gray;
-  z-index: 1;
+  color: black;
   margin-bottom: 30px;
+  z-index: 1;
 }
 
 .sort-toggle {
@@ -64,12 +64,12 @@ a:hover {
 }
 
 .btn-secondary.focus {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .figure-caption-container {
-    justify-content: center;
-    align-items: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .figure-caption {
