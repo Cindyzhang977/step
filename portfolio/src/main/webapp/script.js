@@ -46,6 +46,8 @@ function createPhoto(photo) {
 // dictionary mapping id : photo component
 const photoComponents = {};
 
+const allComponents = []
+
 const monthToNum = {
   Jan: 0,
   Feb: 1,
@@ -78,28 +80,20 @@ for (let index = 0; index < photosData.length; index++) {
   // create photo component
   let component = createPhoto(photo);
   photoComponents[index] = component;
+  allComponents.push(component)
 }
 
 /**
- * Map photos into gallery based on a filter if one is provided
- * @param {string} filter the applied filter used to pick which photos to display
+ * Map photos into gallery 
  * @param {string} components the list of specific photo components to display
  */
-function mapPhotos(filter = null, components = null) {
+function mapPhotos(components = allComponents) {
   $("#gallery").empty();
-  if (components != null) {
-    for (const component of components) {
-      $("#gallery").append(component);
-    }
-  } else {
-    for (const photo of photosData) {
-      if (filter == null || photo.tags.includes(filter)) {
-        $("#gallery").append(photoComponents[photo.id]);
-      }
-    }
-    $("#newest").button("toggle");
-    $("#oldest").button("dispose");
+  for (const component of components) {
+    $("#gallery").append(component);
   }
+  $("#newest").button("toggle");
+  $("#oldest").button("dispose");
 }
 
 /**
@@ -113,14 +107,28 @@ function sortPhotos(order = "newest") {
   } else {
     components.sort((a, b) => b.id - a.id);
   }
-  mapPhotos(null, components);
+  mapPhotos(components);
+}
+
+/**
+ * Filter photos to determine which ones to display
+ * @param {string} filter the applied filter used to pick which photos to display
+ */
+function filterPhotos(filter=null) {
+  let components = []
+  for (const photo of photosData) {
+    if (filter == null || photo.tags.includes(filter)) {
+      components.push(photoComponents[photo.id]);
+    }
+  }
+  mapPhotos(components)
 }
 
 // eventListeners for filtering photos based on an attribute
-$("#filter-beach").click(() => mapPhotos("beach"));
-$("#filter-sunset").click(() => mapPhotos("sunset"));
-$("#filter-mountain").click(() => mapPhotos("mountain"));
-$("#filter-none").click(() => mapPhotos());
+$("#filter-beach").click(() => filterPhotos("beach"));
+$("#filter-sunset").click(() => filterPhotos("sunset"));
+$("#filter-mountain").click(() => filterPhotos("mountain"));
+$("#filter-none").click(() => filterPhotos());
 
 // eventListeners for sorting photos
 $("#newest").click(() =>
