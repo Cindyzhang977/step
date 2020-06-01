@@ -123,6 +123,16 @@ $("#filter-none").click(() => filterPhotos());
 $("#newest").click(() => sortPhotos("newest"));
 $("#oldest").click(() => sortPhotos("oldest"));
 
+/**
+ * fetch text from /data to display 
+ */
+function getFetchRequest() {
+  fetch("/data").then(response => response.text()
+                .then(txt => $("#fetch-response").text(txt)))
+}
+
+$("#fetch-btn").click(getFetchRequest);
+
 window.onload = () => {
   mapPhotos();
   sortPhotos();
