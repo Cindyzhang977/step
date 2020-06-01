@@ -12,17 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { photosData } from "./photos-data.js";
+
 /**
- * Adds a random greeting to the page.
+ * Create photo component with caption
+ * @param {Photo object} photo a Photo object that contains the data for a photo html component
+ * @return {html component}
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function createPhoto(photo) {
+  const component = `<div class="col-4"> \
+          <figure class=\"figure\"> \
+              <img src=${photo.src} class=\"figure-img img-fluid rounded\" alt=${photo.location}> \
+              <div class=\"row figure-caption-container\"> \
+                  <figcaption class=\"figure-caption photo-location\">${photo.location}</figcaption> \
+                  <span class=\"dot\"></span> \
+                  <figcaption class=\"figure-caption photo-date\">${photo.date}</figcaption> \
+              </div> \
+          </figure> \
+      </div>`;
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  return component;
 }
+
+/**
+ * Map photos into gallery
+ */
+function mapPhotos() {
+  for (const photo of photosData) {
+    const component = createPhoto(photo);
+    $("#gallery").append(component);
+  }
+}
+
+mapPhotos();
