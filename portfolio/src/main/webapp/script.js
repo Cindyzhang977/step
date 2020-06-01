@@ -43,9 +43,6 @@ function createPhoto(photo) {
   return $(component.join(""));
 }
 
-// dictionary mapping id : photo component
-const photoComponents = {};
-
 const allComponents = []
 
 const monthToNum = {
@@ -63,12 +60,7 @@ const monthToNum = {
   Dec: 11,
 };
 
-for (let index = 0; index < photosData.length; index++) {
-  const photo = photosData[index];
-
-  // add index id to each photo
-  photo.id = index;
-
+for (const photo of photosData) {
   // add epoch time to each photo
   const date = photo.date.split(" ");
   const year = date[2];
@@ -76,10 +68,9 @@ for (let index = 0; index < photosData.length; index++) {
   const day = date[1].slice(0, -2);
   const epochTime = new Date(year, month, day).getTime() / 1000;
   photo.epoch = epochTime;
-
   // create photo component
   const component = createPhoto(photo);
-  photoComponents[index] = component;
+  photo.component = component;
   allComponents.push(component)
 }
 
@@ -118,7 +109,7 @@ function filterPhotos(filter=null) {
   const components = []
   for (const photo of photosData) {
     if (filter == null || photo.tags.includes(filter)) {
-      components.push(photoComponents[photo.id]);
+      components.push(photo.component);
     }
   }
   mapPhotos(components)
