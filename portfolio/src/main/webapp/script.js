@@ -41,7 +41,7 @@ function createPhoto(photo) {
   </div>`);
 }
 
-const allComponents = []
+const allComponents = [];
 
 const monthToNum = {
   Jan: 0,
@@ -69,7 +69,7 @@ for (const photo of photosData) {
   // create photo component
   const component = createPhoto(photo);
   photo.component = component;
-  allComponents.push(component)
+  allComponents.push(component);
 }
 
 /**
@@ -103,8 +103,8 @@ function sortPhotos(order = "newest") {
  * Filter photos to determine which ones to display
  * @param {string} filter the applied filter used to pick which photos to display
  */
-function filterPhotos(filter=null) {
-  const components = []
+function filterPhotos(filter = null) {
+  const components = [];
   for (const photo of photosData) {
     if (filter == null || photo.tags.includes(filter)) {
       components.push(photo.component);
@@ -124,11 +124,12 @@ $("#newest").click(() => sortPhotos("newest"));
 $("#oldest").click(() => sortPhotos("oldest"));
 
 /**
- * fetch text from /data to display 
+ * fetch text from /data to display
  */
 function getFetchRequest() {
-  fetch("/data").then(response => response.text()
-                .then(txt => $("#fetch-response").text(txt)))
+  fetch("/data").then((response) =>
+    response.text().then((txt) => $("#fetch-response").text(txt))
+  );
 }
 
 $("#fetch-btn").click(getFetchRequest);
