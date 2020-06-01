@@ -14,6 +14,7 @@ a {
 
 a:hover {
   color: #0056b3;
+  cursor: pointer;
 }
 
 #content {
@@ -45,17 +46,30 @@ a:hover {
 
 /* gallery styles */
 
-.dropdown > .btn {
+.filter-dropdown > .btn,
+.sort-toggle > .btn {
   background-color: whitesmoke;
   border-color: gray;
   color: black;
-  margin: 0 16px 24px 0;
+  margin-bottom: 30px;
   z-index: 1;
 }
 
+.sort-toggle {
+  margin-right: 20px;
+}
+
+.btn-secondary:not(:disabled).active {
+  background-color: gray;
+}
+
+.btn-secondary.focus {
+  box-shadow: none;
+}
+
 .figure-caption-container {
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .figure-caption {
