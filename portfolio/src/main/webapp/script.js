@@ -20,7 +20,7 @@ import { photosData } from "./photos-data.js";
  * @return {html component}
  */
 function createPhoto(photo) {
-  let component = [
+  const component = [
     "<div id=" + photo.epoch + ' class="col-4">',
     '<figure class="figure">',
     "<img src=" +
@@ -64,21 +64,21 @@ const monthToNum = {
 };
 
 for (let index = 0; index < photosData.length; index++) {
-  let photo = photosData[index];
+  const photo = photosData[index];
 
   // add index id to each photo
   photo.id = index;
 
   // add epoch time to each photo
-  let date = photo.date.split(" ");
-  let year = date[2];
-  let month = monthToNum[date[0]];
-  let day = date[1].slice(0, -2);
-  let epochTime = new Date(year, month, day).getTime() / 1000;
+  const date = photo.date.split(" ");
+  const year = date[2];
+  const month = monthToNum[date[0]];
+  const day = date[1].slice(0, -2);
+  const epochTime = new Date(year, month, day).getTime() / 1000;
   photo.epoch = epochTime;
 
   // create photo component
-  let component = createPhoto(photo);
+  const component = createPhoto(photo);
   photoComponents[index] = component;
   allComponents.push(component)
 }
@@ -101,7 +101,7 @@ function mapPhotos(components = allComponents) {
  * @param order the prefered ording to display photos (newest first vs oldest first)
  */
 function sortPhotos(order = "newest") {
-  let components = $("#gallery").contents().toArray();
+  const components = $("#gallery").contents().toArray();
   if (order == "oldest") {
     components.sort((a, b) => a.id - b.id);
   } else {
@@ -115,7 +115,7 @@ function sortPhotos(order = "newest") {
  * @param {string} filter the applied filter used to pick which photos to display
  */
 function filterPhotos(filter=null) {
-  let components = []
+  const components = []
   for (const photo of photosData) {
     if (filter == null || photo.tags.includes(filter)) {
       components.push(photoComponents[photo.id]);
