@@ -63,7 +63,7 @@ a:hover {
   margin-right: 20px;
 }
 
-.btn-secondary:not(:disabled):not(.disabled).active {
+.btn-secondary:not(:disabled).active {
   background-color: gray;
 }
 

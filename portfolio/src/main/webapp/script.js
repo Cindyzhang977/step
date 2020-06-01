@@ -20,35 +20,28 @@ import { photosData } from "./photos-data.js";
  * @return {html component}
  */
 function createPhoto(photo) {
-  let component = [
-    "<div id=" + photo.epoch + ' class="col-lg-4 col-md-6 col-sm-12">',
-    '<figure class="figure">',
-    '<div class="figure-img-container">',
-    "<img src=" +
-      photo.src +
-      ' class="figure-img img-fluid rounded" alt=' +
-      photo.location +
-      ">",
-    "</div>",
-    '<div class="row figure-caption-container">',
-    '<figcaption class="figure-caption photo-location">' +
-      photo.location +
-      "</figcaption>",
-    '<span class="dot"></span>',
-    '<figcaption class="figure-caption photo-date">' +
-      photo.date +
-      "</figcaption>",
-    "</div>",
-    "</figure>",
-    "</div>",
-  ];
-  return $(component.join(""));
+  return $(`
+    <div id="${photo.epoch}" class="col-4">
+      <figure class="figure">
+        <img
+          src="${photo.src}"
+          class="figure-img img-fluid rounded"
+          alt="${photo.location}"
+        />
+        <div class="row figure-caption-container">
+        <figcaption class="figure-caption photo-location">
+          ${photo.location}
+        </figcaption>
+        <span class="dot"></span>
+        <figcaption class="figure-caption photo-date">
+          ${photo.date}
+        </figcaption>
+      </div>
+    </figure>
+  </div>`);
 }
 
-// dictionary mapping id : photo component
-const photoComponents = {};
-
-const allComponents = [];
+const allComponents = []
 
 const monthToNum = {
   Jan: 0,
@@ -65,24 +58,18 @@ const monthToNum = {
   Dec: 11,
 };
 
-for (let index = 0; index < photosData.length; index++) {
-  let photo = photosData[index];
-
-  // add index id to each photo
-  photo.id = index;
-
+for (const photo of photosData) {
   // add epoch time to each photo
-  let date = photo.date.split(" ");
-  let year = date[2];
-  let month = monthToNum[date[0]];
-  let day = date[1].slice(0, -2);
-  let epochTime = new Date(year, month, day).getTime() / 1000;
+  const date = photo.date.split(" ");
+  const year = date[2];
+  const month = monthToNum[date[0]];
+  const day = date[1].slice(0, -2);
+  const epochTime = new Date(year, month, day).getTime() / 1000;
   photo.epoch = epochTime;
-
   // create photo component
-  let component = createPhoto(photo);
-  photoComponents[index] = component;
-  allComponents.push(component);
+  const component = createPhoto(photo);
+  photo.component = component;
+  allComponents.push(component)
 }
 
 /**
@@ -103,7 +90,7 @@ function mapPhotos(components = allComponents) {
  * @param order the prefered ording to display photos (newest first vs oldest first)
  */
 function sortPhotos(order = "newest") {
-  let components = $("#gallery").contents().toArray();
+  const components = $("#gallery").contents().toArray();
   if (order == "oldest") {
     components.sort((a, b) => a.id - b.id);
   } else {
@@ -116,11 +103,11 @@ function sortPhotos(order = "newest") {
  * Filter photos to determine which ones to display
  * @param {string} filter the applied filter used to pick which photos to display
  */
-function filterPhotos(filter = null) {
-  let components = [];
+function filterPhotos(filter=null) {
+  const components = []
   for (const photo of photosData) {
     if (filter == null || photo.tags.includes(filter)) {
-      components.push(photoComponents[photo.id]);
+      components.push(photo.component);
     }
   }
   mapPhotos(components);
@@ -133,12 +120,8 @@ $("#filter-mountain").click(() => filterPhotos("mountain"));
 $("#filter-none").click(() => filterPhotos());
 
 // eventListeners for sorting photos
-$("#newest").click(() =>
-  $("#newest").attr("class").includes("active") ? sortPhotos("newest") : null
-);
-$("#oldest").click(() =>
-  $("#oldest").attr("class").includes("active") ? sortPhotos("oldest") : null
-);
+$("#newest").click(() => sortPhotos("newest"));
+$("#oldest").click(() => sortPhotos("oldest"));
 
 window.onload = () => {
   mapPhotos();
