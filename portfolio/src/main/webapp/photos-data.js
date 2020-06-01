@@ -5,6 +5,7 @@
  * @property {string} date
  * @property {string} src
  * @property {string[]} tags
+ * @property {JQuery} component
  */
 
 export const /** !Array<Photo> */ photosData = [

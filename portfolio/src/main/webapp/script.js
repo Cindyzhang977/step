@@ -20,27 +20,25 @@ import { photosData } from "./photos-data.js";
  * @return {html component}
  */
 function createPhoto(photo) {
-  const component = [
-    "<div id=" + photo.epoch + ' class="col-4">',
-    '<figure class="figure">',
-    "<img src=" +
-      photo.src +
-      ' class="figure-img img-fluid rounded" alt=' +
-      photo.location +
-      ">",
-    '<div class="row figure-caption-container">',
-    '<figcaption class="figure-caption photo-location">' +
-      photo.location +
-      "</figcaption>",
-    '<span class="dot"></span>',
-    '<figcaption class="figure-caption photo-date">' +
-      photo.date +
-      "</figcaption>",
-    "</div>",
-    "</figure>",
-    "</div>",
-  ];
-  return $(component.join(""));
+  return $(`
+    <div id="${photo.epoch}" class="col-4">
+      <figure class="figure">
+        <img
+          src="${photo.src}"
+          class="figure-img img-fluid rounded"
+          alt="${photo.location}"
+        />
+        <div class="row figure-caption-container">
+        <figcaption class="figure-caption photo-location">
+          ${photo.location}
+        </figcaption>
+        <span class="dot"></span>
+        <figcaption class="figure-caption photo-date">
+          ${photo.date}
+        </figcaption>
+      </div>
+    </figure>
+  </div>`);
 }
 
 const allComponents = []
@@ -122,12 +120,8 @@ $("#filter-mountain").click(() => filterPhotos("mountain"));
 $("#filter-none").click(() => filterPhotos());
 
 // eventListeners for sorting photos
-$("#newest").click(() =>
-  $("#newest").attr("class").includes("active") ? sortPhotos("newest") : null
-);
-$("#oldest").click(() =>
-  $("#oldest").attr("class").includes("active") ? sortPhotos("oldest") : null
-);
+$("#newest").click(() => sortPhotos("newest"));
+$("#oldest").click(() => sortPhotos("oldest"));
 
 window.onload = () => {
   mapPhotos();
