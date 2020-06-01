@@ -42,6 +42,10 @@ a:hover {
   width: 200px;
 }
 
+#profile-text-container {
+  margin-bottom: 10px;
+}
+
 #title {
   color: var(--navy);
   font-family: "Dancing Script", cursive, sans-serif;
