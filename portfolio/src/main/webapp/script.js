@@ -128,8 +128,15 @@ $("#oldest").click(() => sortPhotos("oldest"));
  */
 function getFetchRequest() {
   fetch("/data").then(response => response.json()).then((json) => {
-    console.log(json);
-    $("#fetch-response").text(json[0]);
+    for (const comment of json) {
+      const component = $(`
+        <div>
+          ${comment.location}
+          <a href=${comment.link} target=\"_blank\">Learn more</a>
+        </div>
+      `)
+      $("#comments").append(component);
+    }
   });
 }
 
