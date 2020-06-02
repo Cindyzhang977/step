@@ -120,6 +120,17 @@ a:hover {
   margin-top: 100px;
 }
 
+#loading-container {
+  margin: auto;
+  color: gray;
+}
+
+.spinner-border{
+  margin: 15px;
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
 /* comments styles */
 
 #comments-container {
