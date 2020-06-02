@@ -73,7 +73,7 @@ for (const photo of photosData) {
 }
 
 /**
- * Map photos into gallery 
+ * Map photos into gallery
  * @param {string} components the list of specific photo components to display
  */
 function mapPhotos(components = allComponents) {
@@ -110,7 +110,7 @@ function filterPhotos(filter=null) {
       components.push(photo.component);
     }
   }
-  mapPhotos(components)
+  mapPhotos(components);
 }
 
 // eventListeners for filtering photos based on an attribute

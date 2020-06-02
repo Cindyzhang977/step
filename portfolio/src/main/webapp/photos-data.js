@@ -10,6 +10,36 @@
 
 export const /** !Array<Photo> */ photosData = [
     {
+      location: 'Point Lobos',
+      date: 'Jan 10, 2019',
+      src: 'imgs/point-lobos.jpg',
+      tags: ['beach'],
+    },
+    {
+      location: 'Don Edwards',
+      date: 'May 5, 2020',
+      src: 'imgs/don-edwards.jpg',
+      tags: ['wetland'],
+    },
+    {
+      location: 'Fanning Springs',
+      date: 'Jul 8, 2017',
+      src: 'imgs/fanning-springs.jpg',
+      tags: ['springs'],
+    },
+    {
+      location: 'Lake Tahoe',
+      date: 'Jan 4, 2019',
+      src: 'imgs/lake-tahoe.jpg',
+      tags: ['mountain'],
+    },
+    {
+      location: 'Pleasure Point',
+      date: 'Dec 27, 2018',
+      src: 'imgs/pleasure-point.jpg',
+      tags: ['beach'],
+    },
+    {
       location: 'Pigeon Point',
       date: 'Apr 26, 2020',
       src: 'imgs/pigeon-point.jpg',
