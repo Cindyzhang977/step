@@ -5,6 +5,7 @@
 html,
 body {
   background-color: #f7f7f0;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -50,6 +51,11 @@ a:hover {
   color: var(--navy);
   font-family: "Dancing Script", cursive, sans-serif;
   margin-top: 16px;
+}
+
+#header-btn > a {
+  text-decoration: inherit;
+  color: inherit;
 }
 
 /* gallery styles */
@@ -112,4 +118,10 @@ a:hover {
 
 #gallery-container {
   margin-top: 100px;
+}
+
+/* comments styles */
+
+#comments-container {
+  margin: 30px auto;
 }
