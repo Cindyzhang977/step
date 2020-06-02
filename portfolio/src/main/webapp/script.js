@@ -21,23 +21,23 @@ import { photosData } from "./photos-data.js";
  */
 function createPhoto(photo) {
   return $(`
-    <div id="${photo.epoch}" class="col-4">
+    <div id="${photo.epoch}" class="col-lg-4 col-md-6 col-sm-12">
       <figure class="figure">
         <img
           src="${photo.src}"
-          class="figure-img img-fluid rounded"
+          class="figure-img-container img-fluid rounded"
           alt="${photo.location}"
         />
         <div class="row figure-caption-container">
-        <figcaption class="figure-caption photo-location">
-          ${photo.location}
-        </figcaption>
-        <span class="dot"></span>
-        <figcaption class="figure-caption photo-date">
-          ${photo.date}
-        </figcaption>
-      </div>
-    </figure>
+          <figcaption class="figure-caption photo-location">
+            ${photo.location}
+          </figcaption>
+          <span class="dot"></span>
+          <figcaption class="figure-caption photo-date">
+            ${photo.date}
+          </figcaption>
+        </div>
+      </figure>
   </div>`);
 }
 
