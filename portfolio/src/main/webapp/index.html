@@ -14,10 +14,13 @@
       href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="script.js" type="module"></script>
   </head>
   <body>
     <div id="content">
+
+      <!-- header -->
       <div class="container" id="header">
         <div class="row">
           <div class="col-md-4 col-sm-6" id="profile-img-container">
@@ -39,14 +42,17 @@
                 >More about me</a
               >
             </div>
-            <button type="button" class="btn btn-dark" id="fetch-btn">
-              Fetch Request
+            <button type="button" class="btn btn-dark" id="header-btn">
+              <a href="#comments-container">
+                Recommend A Destination
+              </a>
             </button>
             <div id="fetch-response"></div>
           </div>
         </div>
       </div>
 
+      <!-- photo gallery -->
       <div class="container" id="gallery-container">
         <div class="container">
           <div class="row">
@@ -81,9 +87,43 @@
             </div>
           </div>
         </div>
-        <div class="row" id="gallery"></div>
+        <div class="row" id="gallery">
+          <div class="row text-center align-items-center" id="loading-container">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div>Loading Photos . . .</div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- comments -->
+      <div class="container" id="comments-container">
+        <h4>Recommend A Destination</h4>
+        <form action="/data" method="POST" autocomplete="off">
+          <div class="form-row align-items-center">
+            <div class="col-sm-3 col-md-6 my-1">
+              <label class="sr-only" for="inlineFormInputLocation">Location</label>
+              <input type="text" class="form-control" id="inlineFormInputLocation" name="location" placeholder="Location" required>
+            </div>
+            <div class="col-sm-3 col-md-4 my-1">
+              <label class="sr-only" for="inlineFormInputGroupLink">Link</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="material-icons">insert_link</i>
+                  </div>
+                </div>
+                <input type="text" class="form-control" id="inlineFormInputGroupLink" name="link" placeholder="Link">
+              </div>
+            </div>
+            <div class="col-auto my-1">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+        <div id="comments"></div>
+      </div>
 
     <script src="script.js" type="module"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

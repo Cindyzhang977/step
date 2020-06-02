@@ -21,23 +21,23 @@ import { photosData } from "./photos-data.js";
  */
 function createPhoto(photo) {
   return $(`
-    <div id="${photo.epoch}" class="col-4">
+    <div id="${photo.epoch}" class="col-lg-4 col-md-6 col-sm-12">
       <figure class="figure">
         <img
           src="${photo.src}"
-          class="figure-img img-fluid rounded"
+          class="figure-img-container img-fluid rounded"
           alt="${photo.location}"
         />
         <div class="row figure-caption-container">
-        <figcaption class="figure-caption photo-location">
-          ${photo.location}
-        </figcaption>
-        <span class="dot"></span>
-        <figcaption class="figure-caption photo-date">
-          ${photo.date}
-        </figcaption>
-      </div>
-    </figure>
+          <figcaption class="figure-caption photo-location">
+            ${photo.location}
+          </figcaption>
+          <span class="dot"></span>
+          <figcaption class="figure-caption photo-date">
+            ${photo.date}
+          </figcaption>
+        </div>
+      </figure>
   </div>`);
 }
 
@@ -127,14 +127,21 @@ $("#oldest").click(() => sortPhotos("oldest"));
  * fetch text from /data to display
  */
 function getFetchRequest() {
-  fetch("/data").then((response) =>
-    response.text().then((txt) => $("#fetch-response").append(txt))
-  );
+  fetch("/data").then(response => response.json()).then((json) => {
+    for (const comment of json) {
+      const component = $(`
+        <div>
+          ${comment.location}
+          <a href=${comment.link} target=\"_blank\">Learn more</a>
+        </div>
+      `)
+      $("#comments").append(component);
+    }
+  });
 }
-
-$("#fetch-btn").click(getFetchRequest);
 
 window.onload = () => {
   mapPhotos();
   sortPhotos();
+  getFetchRequest();
 };
