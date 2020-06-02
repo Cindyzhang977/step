@@ -133,8 +133,6 @@ function getFetchRequest() {
   });
 }
 
-$("#fetch-btn").click(getFetchRequest);
-
 window.onload = () => {
   mapPhotos();
   sortPhotos();
