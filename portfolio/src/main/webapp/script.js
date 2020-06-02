@@ -138,4 +138,5 @@ $("#fetch-btn").click(getFetchRequest);
 window.onload = () => {
   mapPhotos();
   sortPhotos();
+  getFetchRequest();
 };

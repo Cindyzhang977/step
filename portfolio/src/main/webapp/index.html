@@ -91,11 +91,11 @@
       <!-- comments -->
       <div class="container" id="comments-container">
         <h2>Recommend A Destination</h2>
-        <form>
+        <form action="/data" method="POST" autocomplete="off">
           <div class="form-row align-items-center">
             <div class="col-sm-3 col-md-6 my-1">
               <label class="sr-only" for="inlineFormInputLocation">Location</label>
-              <input type="text" class="form-control" id="inlineFormInputLocation" placeholder="Location">
+              <input type="text" class="form-control" id="inlineFormInputLocation" name="location" placeholder="Location" required>
             </div>
             <div class="col-sm-3 col-md-4 my-1">
               <label class="sr-only" for="inlineFormInputGroupLink">Link</label>
@@ -105,7 +105,7 @@
                     <i class="material-icons">insert_link</i>
                   </div>
                 </div>
-                <input type="text" class="form-control" id="inlineFormInputGroupLink" placeholder="Link">
+                <input type="text" class="form-control" id="inlineFormInputGroupLink" name="link" placeholder="Link">
               </div>
             </div>
             <div class="col-auto my-1">
