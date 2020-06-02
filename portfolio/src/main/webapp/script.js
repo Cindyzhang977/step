@@ -127,9 +127,10 @@ $("#oldest").click(() => sortPhotos("oldest"));
  * fetch text from /data to display
  */
 function getFetchRequest() {
-  fetch("/data").then((response) =>
-    response.text().then((txt) => $("#fetch-response").text(txt))
-  );
+  fetch("/data").then(response => response.json()).then((json) => {
+    console.log(json);
+    $("#fetch-response").text(json[0]);
+  });
 }
 
 $("#fetch-btn").click(getFetchRequest);
