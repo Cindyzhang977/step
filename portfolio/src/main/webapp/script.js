@@ -128,7 +128,7 @@ $("#oldest").click(() => sortPhotos("oldest"));
  */
 function getFetchRequest() {
   fetch("/data").then((response) =>
-    response.text().then((txt) => $("#fetch-response").text(txt))
+    response.text().then((txt) => $("#fetch-response").append(txt))
   );
 }
 
