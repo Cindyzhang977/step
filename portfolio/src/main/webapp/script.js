@@ -23,11 +23,13 @@ function createPhoto(photo) {
   return $(`
     <div id="${photo.epoch}" class="col-lg-4 col-md-6 col-sm-12">
       <figure class="figure">
-        <img
-          src="${photo.src}"
-          class="figure-img-container img-fluid rounded"
-          alt="${photo.location}"
-        />
+        <div class="figure-img-container">
+          <img
+            src="${photo.src}"
+            class="img-fluid rounded"
+            alt="${photo.location}"
+          />
+        </div>
         <div class="row figure-caption-container">
           <figcaption class="figure-caption photo-location">
             ${photo.location}
@@ -132,7 +134,7 @@ function getFetchRequest() {
       const component = $(`
         <div>
           ${comment.location}
-          <a href=${comment.link} target=\"_blank\">Learn more</a>
+          <a href=${comment.link} target=\"_blank\" rel=\"noopener noreferrer\">Learn more</a>
         </div>
       `)
       $("#comments").append(component);
