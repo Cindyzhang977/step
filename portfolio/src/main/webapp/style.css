@@ -172,3 +172,7 @@ a:hover {
 .rec-description {
   padding: 4px 16px;
 }
+
+.empty-link {
+  display: none;
+}

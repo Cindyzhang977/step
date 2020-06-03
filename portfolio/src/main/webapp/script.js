@@ -77,7 +77,6 @@ function generatePhotoComponents() {
     photo.component = component;
     allComponents.push(component);
   }
-  console.log('done gen photo comp');
 }
 
 /**
@@ -85,14 +84,12 @@ function generatePhotoComponents() {
  * @param {string} components the list of specific photo components to display
  */
 function mapPhotos(components = allComponents) {
-  console.log('in map');
   $('#gallery').empty();
   for (const component of components) {
     $('#gallery').append(component);
   }
   $('#newest').button('toggle');
   $('#oldest').button('dispose');
-  console.log('done map photos');
 }
 
 /**
@@ -107,7 +104,6 @@ function sortPhotos(order = 'newest') {
     components.sort((a, b) => b.id - a.id);
   }
   mapPhotos(components);
-  console.log('done sort photos');
 }
 
 /**
@@ -143,30 +139,37 @@ function getFetchRequest() {
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
-        let component = null;
-        if (comment.link != '') {
-          component = $(`
-          <div class="col">
-            ${comment.location}
-            <a href=${comment.link} target=\"_blank\" rel=\"noopener noreferrer\">Learn more</a>
-          </div>
+        const component = $(`
+          <div class="comment">
+              <button class="btn btn-block text-left rec-location" type="button" data-toggle="collapse" data-target="#rec-${
+                comment.id
+              }" aria-expanded="false" aria-controls="rec-${comment.id}">
+                <i class="fa fa-caret-right"></i>
+                ${comment.location}
+              </button>
+              <div id="rec-${
+                comment.id
+              }" class="collapse" aria-labelledby="rec-${comment.id}">
+                <div class="rec-description">
+                  <div class="rec-description-txt">
+                    Filler description
+                  </div>
+                  <a href=${
+                    comment.link
+                  } target="_blank" rel="noopener noreferrer" class="rec-link${
+          comment.link ? '' : ' empty-link'
+        }">Learn more</a>
+                </div>
+              </div>
+            </div>
         `);
-        } else {
-          component = $(`
-          <div class="col">
-            ${comment.location}
-          </div>
-        `);
-        }
         $('#comments').append(component);
       }
     });
-  console.log('done fetch');
 }
-generatePhotoComponents();
 
 window.onload = () => {
-  console.log('map');
+  generatePhotoComponents();
   mapPhotos();
   sortPhotos();
   getFetchRequest();

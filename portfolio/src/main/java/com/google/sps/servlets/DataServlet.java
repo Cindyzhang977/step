@@ -17,11 +17,13 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.lang.String;
 import java.util.Arrays;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
@@ -43,7 +45,8 @@ public class DataServlet extends HttpServlet {
     for (Entity e : results.asIterable()) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");
-      Comment c = new Comment(location, link);
+      long id = e.getKey().getId();
+      Comment c = new Comment(location, link, String.valueOf(id));
       comments.add(c);
     }
 
