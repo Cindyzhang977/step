@@ -16,12 +16,6 @@ export const /** !Array<Photo> */ photosData = [
       tags: ['beach'],
     },
     {
-      location: 'Don Edwards',
-      date: 'May 5, 2020',
-      src: 'imgs/don-edwards.jpg',
-      tags: ['wetland'],
-    },
-    {
       location: 'Fanning Springs',
       date: 'Jul 8, 2017',
       src: 'imgs/fanning-springs.jpg',
