@@ -19,13 +19,19 @@ package com.google.sps.data;
  * Contains location and link.
  */
 public class Comment {
-  String location = "";
-  String link ="";
-  String id = "";
+  String location;
+  String link;
+  String description;
+  String id;
 
-  public Comment(String location, String link, String id) {
+  public Comment(String location, String link, String description, String id) {
     this.location = location;
     this.link = link;
+    this.description = description;
     this.id = id;
+
+    if (this.description != null) {
+      this.description = this.description.trim();
+    }
   }
 }

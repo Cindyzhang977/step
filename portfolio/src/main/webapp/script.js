@@ -85,9 +85,7 @@ function generatePhotoComponents() {
  */
 function mapPhotos(components = allComponents) {
   $('#gallery').empty();
-  for (const component of components) {
-    $('#gallery').append(component);
-  }
+  $('#gallery').append(components);
   $('#newest').button('toggle');
   $('#oldest').button('dispose');
 }
@@ -134,11 +132,12 @@ $('#oldest').click(() => sortPhotos('oldest'));
  * fetch text from /data to display
  */
 function getFetchRequest() {
-  $('#comments').empty();
+  const comments = [];
   fetch('/data')
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
+        const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
         const component = $(`
           <div class="comment">
               <button class="btn btn-block text-left rec-location" type="button" data-toggle="collapse" data-target="#rec-${
@@ -151,26 +150,26 @@ function getFetchRequest() {
                 comment.id
               }" class="collapse" aria-labelledby="rec-${comment.id}">
                 <div class="rec-description">
-                  <div class="rec-description-txt">
-                    Filler description
-                  </div>
+                  <div class="rec-description-txt">${
+                    comment.description || 'No Description.'
+                  }</div>
                   <a href=${
                     comment.link
-                  } target="_blank" rel="noopener noreferrer" class="rec-link${
-          comment.link ? '' : ' empty-link'
-        }">Learn more</a>
+                  } target="_blank" rel="noopener noreferrer" class=${linkClass}>Learn more</a>
                 </div>
               </div>
             </div>
         `);
-        $('#comments').append(component);
+        comments.push(component);
       }
+      $('#comments').empty();
+      $('#comments').append(comments);
     });
 }
 
-window.onload = () => {
+$(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
   sortPhotos();
   getFetchRequest();
-};
+});

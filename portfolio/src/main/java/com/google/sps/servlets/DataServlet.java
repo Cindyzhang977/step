@@ -45,8 +45,9 @@ public class DataServlet extends HttpServlet {
     for (Entity e : results.asIterable()) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");
+      String description = (String) e.getProperty("description");
       long id = e.getKey().getId();
-      Comment c = new Comment(location, link, String.valueOf(id));
+      Comment c = new Comment(location, link, description, String.valueOf(id));
       comments.add(c);
     }
 
@@ -60,10 +61,12 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String location = request.getParameter("location");
     String link = request.getParameter("link");
+    String description = request.getParameter("description");
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("location", location);
     commentEntity.setProperty("link", link);
+    commentEntity.setProperty("description", description);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
