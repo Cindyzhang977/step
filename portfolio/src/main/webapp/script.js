@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { photosData } from "./photos-data.js";
+import { photosData } from './photos-data.js';
 
 /**
  * Create photo component with caption
@@ -60,18 +60,24 @@ const monthToNum = {
   Dec: 11,
 };
 
-for (const photo of photosData) {
-  // add epoch time to each photo
-  const date = photo.date.split(" ");
-  const year = date[2];
-  const month = monthToNum[date[0]];
-  const day = date[1].slice(0, -2);
-  const epochTime = new Date(year, month, day).getTime() / 1000;
-  photo.epoch = epochTime;
-  // create photo component
-  const component = createPhoto(photo);
-  photo.component = component;
-  allComponents.push(component);
+/**
+ * Generate html components for each photo in photosData
+ */
+function generatePhotoComponents() {
+  for (const photo of photosData) {
+    // add epoch time to each photo
+    const date = photo.date.split(' ');
+    const year = date[2];
+    const month = monthToNum[date[0]];
+    const day = date[1].slice(0, -2);
+    const epochTime = new Date(year, month, day).getTime() / 1000;
+    photo.epoch = epochTime;
+    // create photo component
+    const component = createPhoto(photo);
+    photo.component = component;
+    allComponents.push(component);
+  }
+  console.log('done gen photo comp');
 }
 
 /**
@@ -79,26 +85,29 @@ for (const photo of photosData) {
  * @param {string} components the list of specific photo components to display
  */
 function mapPhotos(components = allComponents) {
-  $("#gallery").empty();
+  console.log('in map');
+  $('#gallery').empty();
   for (const component of components) {
-    $("#gallery").append(component);
+    $('#gallery').append(component);
   }
-  $("#newest").button("toggle");
-  $("#oldest").button("dispose");
+  $('#newest').button('toggle');
+  $('#oldest').button('dispose');
+  console.log('done map photos');
 }
 
 /**
  * Order photos based on date
  * @param order the prefered ording to display photos (newest first vs oldest first)
  */
-function sortPhotos(order = "newest") {
-  const components = $("#gallery").contents().toArray();
-  if (order == "oldest") {
+function sortPhotos(order = 'newest') {
+  const components = $('#gallery').contents().toArray();
+  if (order == 'oldest') {
     components.sort((a, b) => a.id - b.id);
   } else {
     components.sort((a, b) => b.id - a.id);
   }
   mapPhotos(components);
+  console.log('done sort photos');
 }
 
 /**
@@ -116,33 +125,48 @@ function filterPhotos(filter = null) {
 }
 
 // eventListeners for filtering photos based on an attribute
-$("#filter-beach").click(() => filterPhotos("beach"));
-$("#filter-sunset").click(() => filterPhotos("sunset"));
-$("#filter-mountain").click(() => filterPhotos("mountain"));
-$("#filter-none").click(() => filterPhotos());
+$('#filter-beach').click(() => filterPhotos('beach'));
+$('#filter-sunset').click(() => filterPhotos('sunset'));
+$('#filter-mountain').click(() => filterPhotos('mountain'));
+$('#filter-none').click(() => filterPhotos());
 
 // eventListeners for sorting photos
-$("#newest").click(() => sortPhotos("newest"));
-$("#oldest").click(() => sortPhotos("oldest"));
+$('#newest').click(() => sortPhotos('newest'));
+$('#oldest').click(() => sortPhotos('oldest'));
 
 /**
  * fetch text from /data to display
  */
 function getFetchRequest() {
-  fetch("/data").then(response => response.json()).then((json) => {
-    for (const comment of json) {
-      const component = $(`
-        <div>
-          ${comment.location}
-          <a href=${comment.link} target=\"_blank\" rel=\"noopener noreferrer\">Learn more</a>
-        </div>
-      `)
-      $("#comments").append(component);
-    }
-  });
+  $('#comments').empty();
+  fetch('/data')
+    .then((response) => response.json())
+    .then((json) => {
+      for (const comment of json) {
+        let component = null;
+        if (comment.link != '') {
+          component = $(`
+          <div class="col">
+            ${comment.location}
+            <a href=${comment.link} target=\"_blank\" rel=\"noopener noreferrer\">Learn more</a>
+          </div>
+        `);
+        } else {
+          component = $(`
+          <div class="col">
+            ${comment.location}
+          </div>
+        `);
+        }
+        $('#comments').append(component);
+      }
+    });
+  console.log('done fetch');
 }
+generatePhotoComponents();
 
 window.onload = () => {
+  console.log('map');
   mapPhotos();
   sortPhotos();
   getFetchRequest();
