@@ -21,9 +21,11 @@ package com.google.sps.data;
 public class Comment {
   String location = "";
   String link ="";
+  String id = "";
 
-  public Comment(String location, String link) {
+  public Comment(String location, String link, String id) {
     this.location = location;
     this.link = link;
+    this.id = id;
   }
 }
