@@ -120,7 +120,14 @@ a:hover {
   margin-top: 100px;
 }
 
-#loading-container {
+/* loading styles */
+
+#comments,
+#gallery {
+  margin: 40px auto;
+}
+
+.loading-container {
   margin: auto;
   color: gray;
 }
