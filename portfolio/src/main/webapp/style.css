@@ -139,6 +139,19 @@ a:hover {
 }
 
 /* comments styles */
+#submit-btn-container {
+  justify-content: flex-end;
+  margin: auto 4px;
+  width: 100%;
+}
+
+#submit-btn {
+  padding: 0;
+}
+
+#submit-btn > button {
+  width: 100%;
+}
 
 #comments-container {
   margin: 30px auto;

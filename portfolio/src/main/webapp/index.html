@@ -56,6 +56,7 @@
       <!-- photo gallery -->
       <div class="container" id="gallery-container">
         <div class="container">
+          <!-- filter & sort features -->
           <div class="row">
             <div
               class="btn-group btn-group-toggle sort-toggle"
@@ -88,6 +89,7 @@
             </div>
           </div>
         </div>
+        <!-- gallery -->
         <div class="row" id="gallery">
           <div class="row text-center align-items-center loading-container">
             <div class="spinner-border" role="status">
@@ -101,13 +103,14 @@
       <!-- comments -->
       <div class="container" id="comments-container">
         <h4>Recommend A Destination</h4>
+        <!-- comments form -->
         <form action="/data" method="POST" autocomplete="off">
           <div class="form-row align-items-center">
-            <div class="col-sm-3 col-md-6 my-1">
+            <div class="col-sm-6 col-md-8 my-1">
               <label class="sr-only" for="inlineFormInputLocation">Location</label>
               <input type="text" class="form-control" id="inlineFormInputLocation" name="location" placeholder="Location" required>
             </div>
-            <div class="col-sm-3 col-md-4 my-1">
+            <div class="col-sm-6 col-md-4 my-1">
               <label class="sr-only" for="inlineFormInputGroupLink">Link</label>
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -118,11 +121,18 @@
                 <input type="text" class="form-control" id="inlineFormInputGroupLink" name="link" placeholder="Link">
               </div>
             </div>
-            <div class="col-auto my-1">
-              <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="col-12 my-1">
+              <label class="sr-only" for="inlineFormInputDescription">Description</label>
+              <textarea class="form-control" id="inlineFormInputDescription" name="description" placeholder="Description"></textarea>
+            </div>
+            <div class="row" id="submit-btn-container">
+              <div class="col-sm-12 col-md-3 my-1" id="submit-btn">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
             </div>
           </div>
         </form>
+        <!-- comments section -->
         <div class="row">
           <div class="accordion" id="comments">
             <div class="row text-center align-items-center loading-container">
