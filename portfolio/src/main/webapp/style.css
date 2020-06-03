@@ -49,7 +49,7 @@ a:hover {
 
 #title {
   color: var(--navy);
-  font-family: "Dancing Script", cursive, sans-serif;
+  font-family: 'Dancing Script', cursive, sans-serif;
   margin-top: 16px;
 }
 
@@ -132,7 +132,7 @@ a:hover {
   color: gray;
 }
 
-.spinner-border{
+.spinner-border {
   margin: 15px;
   width: 2.2rem;
   height: 2.2rem;
@@ -142,4 +142,33 @@ a:hover {
 
 #comments-container {
   margin: 30px auto;
+}
+
+#comments {
+  margin: 16px;
+  width: 100%;
+}
+
+.comment {
+  background-color: #edede1;
+  border-radius: 4px;
+  text-align: left;
+  margin: 4px auto;
+  padding: 4px;
+  width: 100%;
+}
+
+.rec-location,
+.rec-link {
+  /* margin: auto 10px; */
+  /* border: 1px solid salmon; */
+}
+
+.rec-location {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.rec-description {
+  padding: 4px 16px;
 }
