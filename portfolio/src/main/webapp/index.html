@@ -15,6 +15,7 @@
       rel="stylesheet"
     />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="script.js" type="module"></script>
   </head>
   <body>
@@ -122,16 +123,46 @@
             </div>
           </div>
         </form>
-        <div class="row" id="comments">
-          <div class="row text-center align-items-center loading-container">
+        <div class="row">
+          <div class="accordion" id="comments">
+            <div class="comment">
+              <button class="btn btn-block text-left rec-location" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <i class="fa fa-caret-right"></i>
+                Collapsible Group Item #1
+              </button>
+              <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                <div class="rec-description">
+                  <div class="rec-description-txt">
+                    Text1
+                  </div>
+                  <a href="" target=\"_blank\" rel=\"noopener noreferrer\" class="rec-link">Learn more</a>
+                </div>
+              </div>
+            </div>
+            <div class="comment">
+              <button class="btn btn-block text-left rec-location" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <i class="fa fa-caret-right"></i>
+                Collapsible Group Item #2
+              </button>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                <div class="rec-description">
+                  <div class="rec-description-txt">
+                    Text2
+                  </div>
+                  <a href="" target=\"_blank\" rel=\"noopener noreferrer\" class="rec-link">Learn more</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="row text-center align-items-center loading-container">
             <div class="spinner-border" role="status">
               <span class="sr-only">Loading Recommendations...</span>
             </div>
             <div>Loading Recommendations . . .</div>
-          </div>
+          </div> -->
         </div>
       </div>
-      
 
     <script src="script.js" type="module"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
