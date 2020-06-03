@@ -171,12 +171,6 @@ a:hover {
   width: 100%;
 }
 
-.rec-location,
-.rec-link {
-  /* margin: auto 10px; */
-  /* border: 1px solid salmon; */
-}
-
 .rec-location {
   font-size: 1.4rem;
   font-weight: 500;
@@ -184,6 +178,12 @@ a:hover {
 
 .rec-description {
   padding: 4px 16px;
+}
+
+.rec-description-txt {
+  margin-bottom: 10px;
+  vertical-align: top;
+  white-space: pre;
 }
 
 .empty-link {
