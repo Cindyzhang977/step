@@ -189,3 +189,7 @@ a:hover {
 .empty-link {
   display: none;
 }
+
+.fa-chevron-down {
+  margin: auto 6px;
+}

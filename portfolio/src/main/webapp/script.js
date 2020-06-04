@@ -171,13 +171,39 @@ function createComment(comment) {
   `);
 }
 
+let comments = [];
+let commentIds = [];
+
 /**
- * fetch text from /data to display
+ * Add event listener to detect when comment is being collapsed/expanded in order to rotate caret accordingly
+ * @param {string} cid comment id used to distinguish each unique comment
+ */
+function addRotationEvent(cid) {
+  const $elem = $(`#${cid}`);
+  $elem.on('click', () => {
+    $elem.find('.fa').toggleClass('rotated');
+    const angle = $elem.find('.fa').hasClass('rotated') ? 90 : 0;
+    $elem.find('.fa').animate(
+      { deg: angle },
+      {
+        duration: 200,
+        step: function (now) {
+          $elem.find('.fa').css({
+            transform: 'rotate(' + now + 'deg)',
+          });
+        },
+      }
+    );
+  });
+}
+
+/**
+ * fetch comments from datastore to display
  */
 function loadComments() {
-  const comments = [];
-  const commentIds = [];
-  fetch('/data')
+  comments = [];
+  commentIds = [];
+  fetch('/data?type=load')
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
@@ -190,35 +216,34 @@ function loadComments() {
     })
     .then(() => {
       for (const cid of commentIds) {
-        const $elem = $(`#${cid}`);
-        $elem.on('click', () => {
-          $elem.find('.fa').toggleClass('rotated');
-          const angle = $elem.find('.fa').hasClass('rotated') ? 90 : 0;
-          $elem.find('.fa').animate(
-            { deg: angle },
-            {
-              duration: 200,
-              step: function (now) {
-                $elem.find('.fa').css({
-                  transform: 'rotate(' + now + 'deg)',
-                });
-              },
-            }
-          );
-        });
+        addRotationEvent(cid);
       }
     });
 }
 
+/**
+ * Load more comments to be displayed and append them to comments section
+ */
+function loadMoreComments() {
+  if (comments.length == 0) {
+    loadComments();
+    return;
+  }
+  fetch('/data?type=append')
+    .then((response) => response.json())
+    .then((json) => {});
+}
+
+/**
+ * Make POST request to /data upon submission of recommendation form to add comment to datastore
+ */
 function handleSubmit(e) {
   e.preventDefault();
   $.ajax({
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: function (data) {
-      console.log('Hey, we got reply form java side, with following data: ');
-      console.log(data);
+    success: function () {
       loadComments();
     },
   });

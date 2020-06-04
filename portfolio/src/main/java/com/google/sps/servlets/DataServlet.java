@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import java.util.Enumeration;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -42,10 +44,12 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    this.comments = new ArrayList<>();
+    if (request.getParameter("type").equals("load") || this.comments == null) {
+      this.comments = new ArrayList<>();
+    }
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
-    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(15));
+    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(5));
     for (Entity e : resultsList) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");
@@ -74,7 +78,5 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
-
-    response.sendRedirect("/index.html");
   }
 }
