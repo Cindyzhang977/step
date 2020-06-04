@@ -38,13 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private ArrayList<Comment> comments;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<Comment> comments = new ArrayList<>();
+    this.comments = new ArrayList<>();
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
-    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(5));
+    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(15));
     for (Entity e : resultsList) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");

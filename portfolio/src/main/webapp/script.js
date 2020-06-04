@@ -210,6 +210,23 @@ function loadComments() {
     });
 }
 
+function handleSubmit(e) {
+  e.preventDefault();
+  $.ajax({
+    type: 'POST',
+    url: '/data',
+    data: $(this).serialize(),
+    success: function (data) {
+      console.log('Hey, we got reply form java side, with following data: ');
+      console.log(data);
+      loadComments();
+    },
+  });
+  $(this).find('input,textarea').val('');
+}
+
+$('#rec-form').submit(handleSubmit);
+
 $(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
