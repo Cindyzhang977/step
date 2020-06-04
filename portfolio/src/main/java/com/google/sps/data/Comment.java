@@ -14,17 +14,19 @@
 
 package com.google.sps.data;
 
+import javax.annotation.Nullable;
+
 /**
  * Class representing the a destination recommendation comment.
  * Contains location and link.
  */
 public class Comment {
-  String location;
-  String link;
-  String description;
-  String id;
+  private String location;
+  private String link;
+  private String description;
+  private String id;
 
-  public Comment(String location, String link, String description, String id) {
+  public Comment(String location, String link, @Nullable String description, String id) {
     this.location = location;
     this.link = link;
     this.description = description;
@@ -33,5 +35,21 @@ public class Comment {
     if (this.description != null) {
       this.description = this.description.trim();
     }
+  }
+
+  public String getLocation() {
+    return this.location;
+  }
+
+  public String getLink() {
+    return this.link;
+  }
+
+  public String getDescription() {
+    return this.description;
+  }
+
+  public String getId() {
+    return this.id;
   }
 }

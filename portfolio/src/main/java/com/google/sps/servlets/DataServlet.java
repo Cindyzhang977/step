@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final ArrayList<Comment> comments = new ArrayList<>();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<Comment> comments = new ArrayList<>();
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
     for (Entity e : results.asIterable()) {
