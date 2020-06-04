@@ -174,7 +174,7 @@ function createComment(comment) {
 /**
  * fetch text from /data to display
  */
-function getFetchRequest() {
+function loadComments() {
   const comments = [];
   const commentIds = [];
   fetch('/data')
@@ -214,5 +214,5 @@ $(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
   sortPhotos();
-  getFetchRequest();
+  loadComments();
 });

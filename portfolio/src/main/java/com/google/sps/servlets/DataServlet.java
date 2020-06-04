@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.lang.String;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final ArrayList<Comment> comments = new ArrayList<>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    ArrayList<Comment> comments = new ArrayList<>();
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
-    for (Entity e : results.asIterable()) {
+    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(5));
+    for (Entity e : resultsList) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");
       String description = (String) e.getProperty("description");
