@@ -16,8 +16,8 @@ import { photosData } from './photos-data.js';
 
 /**
  * Create photo component with caption
- * @param {Photo object} photo a Photo object that contains the data for a photo html component
- * @return {html component}
+ * @param {Photo} photo a Photo object that contains the data for a photo html component
+ * @return {JQuery}
  */
 function createPhoto(photo) {
   return $(`
@@ -129,6 +129,39 @@ $('#newest').click(() => sortPhotos('newest'));
 $('#oldest').click(() => sortPhotos('oldest'));
 
 /**
+ * Create comment component with location, description, and link
+ * @param {json} comment a json object that contains the data for a comment html component
+ * @return {JQuery}
+ */
+function createComment(comment) {
+  const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
+  return $(`
+    <div class="comment">
+        <button class="btn btn-block text-left rec-location" id="btn${
+          comment.id
+        }" type="button" data-toggle="collapse" data-target="#rec-${
+    comment.id
+  }" aria-expanded="false" aria-controls="rec-${comment.id}">
+          <i class="fa fa-caret-right"></i>
+          ${comment.location}
+        </button>
+        <div id="rec-${comment.id}" class="collapse" aria-labelledby="rec-${
+    comment.id
+  }">
+          <div class="rec-description">
+            <div class="rec-description-txt">${
+              comment.description || 'No Description.'
+            }</div>
+            <a href=${
+              comment.link
+            } target="_blank" rel="noopener noreferrer" class=${linkClass}>Learn more</a>
+          </div>
+        </div>
+      </div>
+  `);
+}
+
+/**
  * fetch text from /data to display
  */
 function getFetchRequest() {
@@ -138,31 +171,7 @@ function getFetchRequest() {
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
-        const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
-        const component = $(`
-          <div class="comment">
-              <button class="btn btn-block text-left rec-location" id="btn${
-                comment.id
-              }" type="button" data-toggle="collapse" data-target="#rec-${
-          comment.id
-        }" aria-expanded="false" aria-controls="rec-${comment.id}">
-                <i class="fa fa-caret-right"></i>
-                ${comment.location}
-              </button>
-              <div id="rec-${
-                comment.id
-              }" class="collapse" aria-labelledby="rec-${comment.id}">
-                <div class="rec-description">
-                  <div class="rec-description-txt">${
-                    comment.description || 'No Description.'
-                  }</div>
-                  <a href=${
-                    comment.link
-                  } target="_blank" rel="noopener noreferrer" class=${linkClass}>Learn more</a>
-                </div>
-              </div>
-            </div>
-        `);
+        const component = createComment(comment);
         comments.push(component);
         commentIds.push(`btn${comment.id}`);
       }
