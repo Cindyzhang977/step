@@ -137,27 +137,37 @@ function createComment(comment) {
   const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
   return $(`
     <div class="comment">
-        <button class="btn btn-block text-left rec-location" id="btn${
-          comment.id
-        }" type="button" data-toggle="collapse" data-target="#rec-${
-    comment.id
-  }" aria-expanded="false" aria-controls="rec-${comment.id}">
-          <i class="fa fa-caret-right"></i>
-          ${comment.location}
-        </button>
-        <div id="rec-${comment.id}" class="collapse" aria-labelledby="rec-${
-    comment.id
-  }">
-          <div class="rec-description">
-            <div class="rec-description-txt">${
-              comment.description || 'No Description.'
-            }</div>
-            <a href=${
-              comment.link
-            } target="_blank" rel="noopener noreferrer" class=${linkClass}>Learn more</a>
+      <button
+        class="btn btn-block text-left rec-location"
+        id="btn${comment.id}"
+        type="button"
+        data-toggle="collapse"
+        data-target="#rec-${comment.id}"
+        aria-expanded="false"
+        aria-controls="rec-${comment.id}"
+      >
+        <i class="fa fa-caret-right"></i>
+        ${comment.location}
+      </button>
+      <div
+        id="rec-${comment.id}"
+        class="collapse"
+        aria-labelledby="rec-${comment.id}"
+      >
+        <div class="rec-description">
+          <div class="rec-description-txt">
+            ${comment.description || 'No Description.'}
           </div>
+          <a
+            href=${comment.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class=${linkClass}
+            >Learn more</a
+          >
         </div>
       </div>
+    </div>
   `);
 }
 
