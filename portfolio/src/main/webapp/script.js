@@ -171,8 +171,21 @@ function getFetchRequest() {
     })
     .then(() => {
       for (const cid of commentIds) {
-        $(`#${cid}`).on('click', () => {
-          $(this).find('i').animate({ rotation: 90 });
+        const $elem = $(`#${cid}`);
+        $elem.on('click', () => {
+          $elem.find('.fa').toggleClass('rotated');
+          const angle = $elem.find('.fa').hasClass('rotated') ? 90 : 0;
+          $elem.find('.fa').animate(
+            { deg: angle },
+            {
+              duration: 200,
+              step: function (now) {
+                $elem.find('.fa').css({
+                  transform: 'rotate(' + now + 'deg)',
+                });
+              },
+            }
+          );
         });
       }
     });
