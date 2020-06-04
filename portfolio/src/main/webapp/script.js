@@ -141,9 +141,11 @@ function getFetchRequest() {
         const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
         const component = $(`
           <div class="comment">
-              <button class="btn btn-block text-left rec-location" id="btn${comment.id}" type="button" data-toggle="collapse" data-target="#rec-${
+              <button class="btn btn-block text-left rec-location" id="btn${
                 comment.id
-              }" aria-expanded="false" aria-controls="rec-${comment.id}">
+              }" type="button" data-toggle="collapse" data-target="#rec-${
+          comment.id
+        }" aria-expanded="false" aria-controls="rec-${comment.id}">
                 <i class="fa fa-caret-right"></i>
                 ${comment.location}
               </button>
@@ -163,26 +165,17 @@ function getFetchRequest() {
         `);
         comments.push(component);
         commentIds.push(`btn${comment.id}`);
-        console.log('in fetch for loop')
-        console.log(`btn${comment.id}`)
       }
       $('#comments').empty();
       $('#comments').append(comments);
-    });
-    
-  console.log('post fetch for loop')
-  console.log(commentIds)
-  for (const cid of commentIds) {
-    console.log('in for loop')
-    console.log(cid)
-    $(`#${cid}`).on('click', () => {
-      console.log('clicked')
-      console.log(this)
-      $(this).find('i').animate(
-        {rotation: 90}
-      )
     })
-  }
+    .then(() => {
+      for (const cid of commentIds) {
+        $(`#${cid}`).on('click', () => {
+          $(this).find('i').animate({ rotation: 90 });
+        });
+      }
+    });
 }
 
 $(document).ready(() => {
