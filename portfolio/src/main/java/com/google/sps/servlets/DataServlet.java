@@ -35,9 +35,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns some example content. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+
+  /** Class to wrap around comments array and total number of comments, used to product json */
+  private class CommentsWrapper {
+    private int total = 0; 
+    private ArrayList<Comment> comments;
+    
+    CommentsWrapper(int total, ArrayList<Comment> comments) {
+      this.total = total;
+      this.comments = comments;
+    }
+  }
   
   static final int LOAD_SIZE = 5;
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -80,8 +91,11 @@ public class DataServlet extends HttpServlet {
     }
     this.cursor = results.getCursor();
 
+    int total = pq.countEntities();
+    CommentsWrapper cm = new CommentsWrapper(total, comments);
+
     Gson gson = new Gson();
-    String json = gson.toJson(comments);
+    String json = gson.toJson(cm);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }

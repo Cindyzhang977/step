@@ -237,6 +237,13 @@ a:hover {
   opacity: 1;
 }
 
+#rec-count {
+  color: gray;
+  margin: 4px auto;
+  padding: 0 20px 8px 20px;
+  text-align: right;
+}
+
 #load-more-btn {
   background-color: #e1eded;
   color: gray;
