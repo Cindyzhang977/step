@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
+  
   static final int LOAD_SIZE = 5;
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private FetchOptions fetchOptions;
