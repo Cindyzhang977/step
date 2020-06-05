@@ -1,5 +1,7 @@
 :root {
   --navy: #1b2d45;
+  --accent: #39bdb8;
+  --accent-hover: #2fd6d0;
 }
 
 html,
@@ -9,13 +11,17 @@ body {
 }
 
 a {
-  color: #007bff;
+  color: var(--accent);
   text-decoration: none;
 }
 
 a:hover {
-  color: #0056b3;
+  color: var(--accent-hover);
   cursor: pointer;
+}
+
+.btn:focus {
+  box-shadow: none;
 }
 
 #content {
@@ -150,7 +156,14 @@ a:hover {
 }
 
 #submit-btn > button {
+  background-color: var(--accent);
+  border-color: var(--accent);
   width: 100%;
+}
+
+#submit-btn > button:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 #comments-container {
@@ -190,6 +203,22 @@ a:hover {
   display: none;
 }
 
+.fa-caret-right {
+  margin-right: 4px;
+}
+
 .fa-chevron-down {
   margin: auto 6px;
+}
+
+#load-more-btn {
+  background-color: #e1eded;
+  color: gray;
+  margin: auto 16px;
+  padding: 8px 0;
+}
+
+#load-more-btn:hover {
+  background-color: #e9f0f0;
+  color: var(--navy);
 }

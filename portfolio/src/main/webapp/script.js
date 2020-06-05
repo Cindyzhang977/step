@@ -155,9 +155,9 @@ function createComment(comment) {
         aria-labelledby="rec-${comment.id}"
       >
         <div class="rec-description">
-          <div class="rec-description-txt">
-            ${comment.description || 'No Description.'}
-          </div>
+          <div class="rec-description-txt">${
+            comment.description || 'No Description.'
+          }</div>
           <a
             href=${comment.link}
             target="_blank"
