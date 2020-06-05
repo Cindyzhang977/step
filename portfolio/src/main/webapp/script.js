@@ -199,11 +199,14 @@ function addRotationEvent(cid) {
 
 /**
  * fetch comments from datastore to display
+ * @param {string} type the request parameter (load | append)
  */
-function loadComments() {
-  comments = [];
-  commentIds = [];
-  fetch('/data?type=load')
+function loadComments(type = 'load') {
+  if (type == 'load') {
+    comments = [];
+    commentIds = [];
+  }
+  fetch(`/data?type=${type}`)
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
@@ -221,18 +224,7 @@ function loadComments() {
     });
 }
 
-/**
- * Load more comments to be displayed and append them to comments section
- */
-function loadMoreComments() {
-  if (comments.length == 0) {
-    loadComments();
-    return;
-  }
-  fetch('/data?type=append')
-    .then((response) => response.json())
-    .then((json) => {});
-}
+$('#load-more-btn').click(() => loadComments('append'));
 
 /**
  * Make POST request to /data upon submission of recommendation form to add comment to datastore
@@ -243,9 +235,7 @@ function handleSubmit(e) {
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: function () {
-      loadComments();
-    },
+    success: () => loadComments('load'),
   });
   $(this).find('input,textarea').val('');
 }

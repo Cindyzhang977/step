@@ -14,8 +14,7 @@
 
 package com.google.sps.servlets;
 
-import java.util.Enumeration;
-
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -23,13 +22,13 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultList;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.lang.String;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,18 +38,27 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  static final int LOAD_SIZE = 5;
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final FetchOptions fetchOptions = FetchOptions.Builder.withLimit(LOAD_SIZE);
   private ArrayList<Comment> comments;
+  private String cursor;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    if (request.getParameter("type").equals("load") || this.comments == null) {
-      this.comments = new ArrayList<>();
+    this.comments = new ArrayList<>();    
+    if (request.getParameter("type").equals("load")) {
+      this.cursor = null;
     }
+
+    if (this.cursor != null) {
+      fetchOptions.startCursor(Cursor.fromWebSafeString(this.cursor));
+    }
+
     Query query = new Query("Comment");
-    PreparedQuery results = datastore.prepare(query);
-    List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(5));
-    for (Entity e : resultsList) {
+    PreparedQuery pq = datastore.prepare(query);
+    QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+    for (Entity e : results) {
       String location = (String) e.getProperty("location");
       String link = (String) e.getProperty("link");
       String description = (String) e.getProperty("description");
@@ -58,6 +66,7 @@ public class DataServlet extends HttpServlet {
       Comment c = new Comment(location, link, description, String.valueOf(id));
       comments.add(c);
     }
+    this.cursor = results.getCursor().toWebSafeString();
 
     Gson gson = new Gson();
     String json = gson.toJson(comments);
