@@ -245,11 +245,11 @@ function loadComments(type = LoadType.LOAD) {
   fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
-      if (jQuery.isEmptyObject(json)) {
+      if (jQuery.isEmptyObject(json.comments)) {
         $('#comments').children().replaceWith('<div class="empty-notice">No Recommendations</div>')
         return;
       }
-      for (const comment of json) {
+      for (const comment of json.comments) {
         const component = createComment(comment);
         comments.push(component);
         commentIds.push(`btn-${comment.id}`);
@@ -258,6 +258,8 @@ function loadComments(type = LoadType.LOAD) {
         $('#comments').empty();
       }
       $('#comments').append(comments);
+      $('#rec-count').text(`Comments: ${$('.comment').length}/${json.total}`);
+      $('#load-more-btn').prop('disabled', comments.length === json.total);
     })
     .then(() => {
       for (const cid of commentIds) {
