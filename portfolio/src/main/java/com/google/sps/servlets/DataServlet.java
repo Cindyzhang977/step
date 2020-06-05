@@ -40,20 +40,16 @@ public class DataServlet extends HttpServlet {
   
   static final int LOAD_SIZE = 5;
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private FetchOptions fetchOptions;
-  private ArrayList<Comment> comments;
-  private String cursor;
+  private Cursor cursor;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    this.comments = new ArrayList<>();
+    ArrayList<Comment> comments = new ArrayList<>();
     int numComments = Integer.parseInt(request.getParameter("numComments"));
     String type = request.getParameter("type");
-
+    FetchOptions fetchOptions;
+    
     switch (type) {
-      case "load":
-        numComments = LOAD_SIZE;
-        // fall through
       case "reload":
         this.cursor = null;
         fetchOptions = FetchOptions.Builder.withLimit(numComments);
@@ -67,7 +63,7 @@ public class DataServlet extends HttpServlet {
     }
      
     if (this.cursor != null) {
-      fetchOptions.startCursor(Cursor.fromWebSafeString(this.cursor));
+      fetchOptions.startCursor(this.cursor);
     }
 
     Query query = new Query("Comment");
@@ -81,7 +77,7 @@ public class DataServlet extends HttpServlet {
       Comment c = new Comment(location, link, description, String.valueOf(id));
       comments.add(c);
     }
-    this.cursor = results.getCursor().toWebSafeString();
+    this.cursor = results.getCursor();
 
     Gson gson = new Gson();
     String json = gson.toJson(comments);

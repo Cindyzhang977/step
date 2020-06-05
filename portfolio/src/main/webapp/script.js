@@ -15,11 +15,25 @@
 import { photosData } from './photos-data.js';
 
 /**
+ * Supported ways to load comments.
+ * LOAD: load the default number of comments 
+ * RELOAD: reload the existing number of comments 
+ * APPEND: load an additional batch of comments which is then appended to current comments
+ * @enum {string}
+ */
+const LoadType = {
+  LOAD: 'load',
+  RELOAD: 'reload',
+  APPEND: 'append',
+}
+
+
+/**
  * return the datastore id of a comment
  * @param {string} cid the id attribute of a comment html component
  * @return {number}
  */
-function getCommendId(cid) {
+function getCommentId(cid) {
   const idElems = cid.split('-');
   return Number(idElems[idElems.length - 1]);
 }
@@ -184,9 +198,6 @@ function createComment(comment) {
   `);
 }
 
-let comments = [];
-let commentIds = [];
-
 /**
  * Add event listener to detect when comment is being collapsed/expanded in order to rotate caret accordingly
  * @param {string} cid comment id used to distinguish each unique comment
@@ -215,24 +226,22 @@ function addRotationEvent(cid) {
  * @param {string} cid comment id used to distinguish each unique comment
  */
 function deleteComment(cid) {
-  const id = getCommendId(cid);
+  const id = getCommentId(cid);
   $.ajax({
     type: 'POST',
     url: `/delete-data?id=${id}`,
-    success: () => loadComments('reload'),
+    success: () => loadComments(LoadType.RELOAD),
   });
 }
 
 /**
  * fetch comments from datastore to display
- * @param {string} type the request parameter (load | reload | append)
+ * @param {string} type the request parameter
  */
-function loadComments(type = 'load') {
-  const numComments = comments.length - 1;
-  if (type == 'load' || type == 'reload') {
-    comments = [];
-    commentIds = [];
-  }
+function loadComments(type = LoadType.LOAD) {
+  const numComments = $('.comment').length;
+  const comments = [];
+  const commentIds = [];
   fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
@@ -241,7 +250,9 @@ function loadComments(type = 'load') {
         comments.push(component);
         commentIds.push(`btn-${comment.id}`);
       }
-      $('#comments').empty();
+      if (type === LoadType.LOAD || type === LoadType.RELOAD) {
+        $('#comments').empty();
+      }
       $('#comments').append(comments);
     })
     .then(() => {
@@ -252,7 +263,7 @@ function loadComments(type = 'load') {
     });
 }
 
-$('#load-more-btn').click(() => loadComments('append'));
+$('#load-more-btn').click(() => loadComments(LoadType.APPEND));
 
 /**
  * Make POST request to /data upon submission of recommendation form to add comment to datastore
@@ -263,7 +274,7 @@ function handleSubmit(e) {
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: () => loadComments('load'),
+    success: () => loadComments(LoadType.RELOAD),
   });
   $(this).find('input,textarea').val('');
 }
@@ -274,5 +285,5 @@ $(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
   sortPhotos();
-  loadComments();
+  loadComments(LoadType.LOAD);
 });
