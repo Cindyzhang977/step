@@ -134,7 +134,7 @@ $('#oldest').click(() => sortPhotos('oldest'));
  * @return {JQuery}
  */
 function createComment(comment) {
-  const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
+  const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
   return $(`
     <div class="comment">
       <button
@@ -158,13 +158,16 @@ function createComment(comment) {
           <div class="rec-description-txt">${
             comment.description || 'No Description.'
           }</div>
-          <a
-            href=${comment.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class=${linkClass}
-            >Learn more</a
-          >
+          <div class="row">
+            <a
+              href=${comment.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class=${linkClass}
+              >Learn more</a
+            >
+            <i class="fa fa-ban col-2"></i>
+          </div>
         </div>
       </div>
     </div>

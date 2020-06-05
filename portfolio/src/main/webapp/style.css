@@ -200,7 +200,7 @@ a:hover {
 }
 
 .empty-link {
-  display: none;
+  visibility: hidden;
 }
 
 .fa-caret-right {
@@ -209,6 +209,19 @@ a:hover {
 
 .fa-chevron-down {
   margin: auto 6px;
+}
+
+.fa-ban {
+  color: gray;
+  font-size: 1.4rem;
+  text-align: right;
+  opacity: 0.5;
+}
+
+.fa-ban:hover {
+  color: maroon;
+  cursor: pointer;
+  opacity: 1;
 }
 
 #load-more-btn {
