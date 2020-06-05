@@ -15,6 +15,16 @@
 import { photosData } from './photos-data.js';
 
 /**
+ * return the datastore id of a comment
+ * @param {string} cid the id attribute of a comment html component
+ * @return {number}
+ */
+function getCommendId(cid) {
+  const idElems = cid.split('-');
+  return Number(idElems[idElems.length - 1]);
+}
+
+/**
  * Create photo component with caption
  * @param {Photo} photo a Photo object that contains the data for a photo html component
  * @return {JQuery}
@@ -139,7 +149,7 @@ function createComment(comment) {
     <div class="comment">
       <button
         class="btn btn-block text-left rec-location"
-        id="btn${comment.id}"
+        id="btn-${comment.id}"
         type="button"
         data-toggle="collapse"
         data-target="#rec-${comment.id}"
@@ -166,7 +176,7 @@ function createComment(comment) {
               class=${linkClass}
               >Learn more</a
             >
-            <i class="fa fa-ban col-2"></i>
+            <i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>
           </div>
         </div>
       </div>
@@ -201,8 +211,21 @@ function addRotationEvent(cid) {
 }
 
 /**
+ * Delete the comment selected from datastore, reload existing comments
+ * @param {string} cid comment id used to distinguish each unique comment
+ */
+function deleteComment(cid) {
+  const id = getCommendId(cid);
+  $.ajax({
+    type: 'POST',
+    url: `/delete-data?id=${id}`,
+    success: () => loadComments('reload'),
+  });
+}
+
+/**
  * fetch comments from datastore to display
- * @param {string} type the request parameter (load | append)
+ * @param {string} type the request parameter (load | reload | append)
  */
 function loadComments(type = 'load') {
   if (type == 'load') {
@@ -215,7 +238,7 @@ function loadComments(type = 'load') {
       for (const comment of json) {
         const component = createComment(comment);
         comments.push(component);
-        commentIds.push(`btn${comment.id}`);
+        commentIds.push(`btn-${comment.id}`);
       }
       $('#comments').empty();
       $('#comments').append(comments);
@@ -223,6 +246,7 @@ function loadComments(type = 'load') {
     .then(() => {
       for (const cid of commentIds) {
         addRotationEvent(cid);
+        $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
 }
