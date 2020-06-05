@@ -22,9 +22,10 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
-import com.google.sps.data.Comment;
 import com.google.gson.Gson;
+import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.lang.String;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     ArrayList<Comment> comments = new ArrayList<>();
-    int numComments = Integer.parseInt(request.getParameter("numComments"));
+    int numComments = Math.max(Integer.parseInt(request.getParameter("numComments")), LOAD_SIZE);
     String type = request.getParameter("type");
     FetchOptions fetchOptions;
     
@@ -66,7 +67,7 @@ public class DataServlet extends HttpServlet {
       fetchOptions.startCursor(this.cursor);
     }
 
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery pq = datastore.prepare(query);
     QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
     for (Entity e : results) {
@@ -95,6 +96,9 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("location", location);
     commentEntity.setProperty("link", link);
     commentEntity.setProperty("description", description);
+
+    long timestamp = System.currentTimeMillis();
+    commentEntity.setProperty("timestamp", timestamp);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);

@@ -230,7 +230,7 @@ function deleteComment(cid) {
   $.ajax({
     type: 'POST',
     url: `/delete-data?id=${id}`,
-    success: () => loadComments(LoadType.RELOAD),
+    success: () => $('.comment').length > 1 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   });
 }
 
@@ -245,6 +245,10 @@ function loadComments(type = LoadType.LOAD) {
   fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
+      if (jQuery.isEmptyObject(json)) {
+        $('#comments').children().replaceWith('<div class="empty-notice">No Recommendations</div>')
+        return;
+      }
       for (const comment of json) {
         const component = createComment(comment);
         comments.push(component);
@@ -274,7 +278,7 @@ function handleSubmit(e) {
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: () => loadComments(LoadType.RELOAD),
+    success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
 }

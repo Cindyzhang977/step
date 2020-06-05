@@ -203,6 +203,14 @@ a:hover {
   visibility: hidden;
 }
 
+.empty-notice {
+  color: gray;
+  margin: auto;
+  min-height: 5rem;
+  padding: 10px;
+  text-align: center;
+}
+
 .fa-caret-right {
   margin-right: 4px;
 }
