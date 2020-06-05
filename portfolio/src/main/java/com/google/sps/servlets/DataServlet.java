@@ -40,17 +40,32 @@ public class DataServlet extends HttpServlet {
 
   static final int LOAD_SIZE = 5;
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final FetchOptions fetchOptions = FetchOptions.Builder.withLimit(LOAD_SIZE);
+  private FetchOptions fetchOptions;
   private ArrayList<Comment> comments;
   private String cursor;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    this.comments = new ArrayList<>();    
-    if (request.getParameter("type").equals("load")) {
-      this.cursor = null;
-    }
+    this.comments = new ArrayList<>();
+    int numComments = Integer.parseInt(request.getParameter("numComments"));
+    String type = request.getParameter("type");
 
+    switch (type) {
+      case "load":
+        numComments = LOAD_SIZE;
+        // fall through
+      case "reload":
+        this.cursor = null;
+        fetchOptions = FetchOptions.Builder.withLimit(numComments);
+        break;
+      case "append":
+        fetchOptions = FetchOptions.Builder.withLimit(LOAD_SIZE);
+        break;
+      default:
+        this.cursor = null;
+        fetchOptions = FetchOptions.Builder.withLimit(LOAD_SIZE);
+    }
+     
     if (this.cursor != null) {
       fetchOptions.startCursor(Cursor.fromWebSafeString(this.cursor));
     }

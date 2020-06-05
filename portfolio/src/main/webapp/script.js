@@ -228,11 +228,12 @@ function deleteComment(cid) {
  * @param {string} type the request parameter (load | reload | append)
  */
 function loadComments(type = 'load') {
-  if (type == 'load') {
+  const numComments = comments.length - 1;
+  if (type == 'load' || type == 'reload') {
     comments = [];
     commentIds = [];
   }
-  fetch(`/data?type=${type}`)
+  fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
