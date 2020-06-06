@@ -15,6 +15,30 @@
 import { photosData } from './photos-data.js';
 
 /**
+ * Supported ways to load comments.
+ * LOAD: load the default number of comments 
+ * RELOAD: reload the existing number of comments 
+ * APPEND: load an additional batch of comments which is then appended to current comments
+ * @enum {string}
+ */
+const LoadType = {
+  LOAD: 'load',
+  RELOAD: 'reload',
+  APPEND: 'append',
+}
+
+
+/**
+ * return the datastore id of a comment
+ * @param {string} cid the id attribute of a comment html component
+ * @return {number}
+ */
+function getCommentId(cid) {
+  const idElems = cid.split('-');
+  return Number(idElems[idElems.length - 1]);
+}
+
+/**
  * Create photo component with caption
  * @param {Photo} photo a Photo object that contains the data for a photo html component
  * @return {JQuery}
@@ -134,12 +158,12 @@ $('#oldest').click(() => sortPhotos('oldest'));
  * @return {JQuery}
  */
 function createComment(comment) {
-  const linkClass = `"rec-link${comment.link ? '' : ' empty-link'}"`;
+  const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
   return $(`
     <div class="comment">
       <button
         class="btn btn-block text-left rec-location"
-        id="btn${comment.id}"
+        id="btn-${comment.id}"
         type="button"
         data-toggle="collapse"
         data-target="#rec-${comment.id}"
@@ -155,16 +179,19 @@ function createComment(comment) {
         aria-labelledby="rec-${comment.id}"
       >
         <div class="rec-description">
-          <div class="rec-description-txt">
-            ${comment.description || 'No Description.'}
+          <div class="rec-description-txt">${
+            comment.description || 'No Description.'
+          }</div>
+          <div class="row">
+            <a
+              href=${comment.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class=${linkClass}
+              >Learn more</a
+            >
+            <i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>
           </div>
-          <a
-            href=${comment.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class=${linkClass}
-            >Learn more</a
-          >
         </div>
       </div>
     </div>
@@ -172,47 +199,70 @@ function createComment(comment) {
 }
 
 /**
- * fetch text from /data to display
+ * Delete the comment selected from datastore, reload existing comments
+ * @param {string} cid comment id used to distinguish each unique comment
  */
-function getFetchRequest() {
+function deleteComment(cid) {
+  const id = getCommentId(cid);
+  $.ajax({
+    type: 'POST',
+    url: `/delete-data?id=${id}`,
+    success: () => loadComments(LoadType.RELOAD),
+  });
+}
+
+/**
+ * fetch comments from datastore to display
+ * @param {string} type the request parameter
+ */
+function loadComments(type = LoadType.LOAD) {
+  const numComments = $('.comment').length;
   const comments = [];
   const commentIds = [];
-  fetch('/data')
+  fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
       for (const comment of json) {
         const component = createComment(comment);
         comments.push(component);
-        commentIds.push(`btn${comment.id}`);
+        commentIds.push(`btn-${comment.id}`);
       }
-      $('#comments').empty();
+      if (type === LoadType.LOAD || type === LoadType.RELOAD) {
+        $('#comments').empty();
+      }
       $('#comments').append(comments);
     })
     .then(() => {
       for (const cid of commentIds) {
-        const $elem = $(`#${cid}`);
-        $elem.on('click', () => {
-          $elem.find('.fa').toggleClass('rotated');
-          const angle = $elem.find('.fa').hasClass('rotated') ? 90 : 0;
-          $elem.find('.fa').animate(
-            { deg: angle },
-            {
-              duration: 200,
-              step: function (now) {
-                $elem.find('.fa').css({
-                  transform: 'rotate(' + now + 'deg)',
-                });
-              },
-            }
-          );
-        });
+        $(`#${cid}`).click(() => {
+          $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
+        })
+        $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
 }
+
+$('#load-more-btn').click(() => loadComments(LoadType.APPEND));
+
+/**
+ * Make POST request to /data upon submission of recommendation form to add comment to datastore
+ */
+function handleSubmit(e) {
+  e.preventDefault();
+  $.ajax({
+    type: 'POST',
+    url: '/data',
+    data: $(this).serialize(),
+    success: () => loadComments(LoadType.RELOAD),
+  });
+  $(this).find('input,textarea').val('');
+}
+
+$('#rec-form').submit(handleSubmit);
 
 $(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
   sortPhotos();
-  getFetchRequest();
+  loadComments(LoadType.LOAD);
 });
