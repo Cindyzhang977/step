@@ -208,7 +208,12 @@ function deleteComment(cid) {
     type: 'POST',
     url: `/delete-data?id=${id}`,
     success: () => $('.comment').length > 1 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
-  });
+  }).done(() => {
+  if ($('.comment').length === 1) {
+    $('#rec-count').hide()
+  }
+  })
+  
 }
 
 /**
@@ -222,10 +227,13 @@ function loadComments(type = LoadType.LOAD) {
   fetch(`/data?type=${type}&numComments=${numComments}`)
     .then((response) => response.json())
     .then((json) => {
+      // indicate if there are no comments
       if (jQuery.isEmptyObject(json.comments)) {
         $('#comments').children().replaceWith('<div class="empty-notice">No Recommendations</div>')
+        $('#load-more-btn').prop('disabled', true);
         return;
       }
+      // add comments to DOM 
       for (const comment of json.comments) {
         const component = createComment(comment);
         comments.push(component);
@@ -235,10 +243,14 @@ function loadComments(type = LoadType.LOAD) {
         $('#comments').empty();
       }
       $('#comments').append(comments);
-      $('#rec-count').text(`Comments: ${$('.comment').length}/${json.total}`);
-      $('#load-more-btn').prop('disabled', comments.length === json.total);
+      // comments count & load more button 
+      const numLoaded = $('.comment').length;
+      $('#rec-count').show()
+      $('#rec-count').text(`Comments: ${numLoaded}/${json.total}`);
+      $('#load-more-btn').prop('disabled', numLoaded === json.total);
     })
     .then(() => {
+      // add individual event listeners per comment
       for (const cid of commentIds) {
         $(`#${cid}`).click(() => {
           $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');

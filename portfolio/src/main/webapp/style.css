@@ -1,13 +1,17 @@
 :root {
   --navy: #1b2d45;
   --accent: #39bdb8;
-  --accent-hover: #2fd6d0;
+  --accent-hover: #32cfc9;
 }
 
 html,
 body {
   background-color: #f7f7f0;
   scroll-behavior: smooth;
+}
+
+h4 {
+  color: var(--navy);
 }
 
 a {
@@ -245,13 +249,17 @@ a:hover {
 }
 
 #load-more-btn {
-  background-color: #e1eded;
-  color: gray;
+  background-color: #e9f0f0;
+  color: var(--navy);
   margin: auto 16px;
   padding: 8px 0;
 }
 
 #load-more-btn:hover {
-  background-color: #e9f0f0;
-  color: var(--navy);
+  background-color: #e1eded;
+}
+
+#load-more-btn:disabled {
+  background-color: #E1E7ED;
+  color: gray;
 }
