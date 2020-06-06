@@ -217,6 +217,11 @@ a:hover {
 
 .fa-caret-right {
   margin-right: 4px;
+  transition: transform 280ms;
+}
+
+.fa-caret-right.rotated {
+  transform: rotate(90deg);
 }
 
 .fa-chevron-down {
