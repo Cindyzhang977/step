@@ -199,29 +199,6 @@ function createComment(comment) {
 }
 
 /**
- * Add event listener to detect when comment is being collapsed/expanded in order to rotate caret accordingly
- * @param {string} cid comment id used to distinguish each unique comment
- */
-function addRotationEvent(cid) {
-  const $elem = $(`#${cid}`);
-  $elem.on('click', () => {
-    $elem.find('.fa').toggleClass('rotated');
-    const angle = $elem.find('.fa').hasClass('rotated') ? 90 : 0;
-    $elem.find('.fa').animate(
-      { deg: angle },
-      {
-        duration: 200,
-        step: function (now) {
-          $elem.find('.fa').css({
-            transform: 'rotate(' + now + 'deg)',
-          });
-        },
-      }
-    );
-  });
-}
-
-/**
  * Delete the comment selected from datastore, reload existing comments
  * @param {string} cid comment id used to distinguish each unique comment
  */
@@ -257,7 +234,9 @@ function loadComments(type = LoadType.LOAD) {
     })
     .then(() => {
       for (const cid of commentIds) {
-        addRotationEvent(cid);
+        $(`#${cid}`).click(() => {
+          $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
+        })
         $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
