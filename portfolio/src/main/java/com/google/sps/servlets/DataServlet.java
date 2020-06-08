@@ -110,7 +110,7 @@ public class DataServlet extends HttpServlet {
     String link = request.getParameter("link");
     String description = request.getParameter("description");
     String userEmail = UserServiceFactory.getUserService().getCurrentUser().getEmail();
-    String displayedName = request.getParameter("anonCheck") != null ? request.getParameter("displayedName") : "anon";
+    String displayedName = request.getParameter("anonCheck") == null ? request.getParameter("displayedName") : "anon";
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("location", location);
