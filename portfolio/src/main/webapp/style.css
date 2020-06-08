@@ -36,7 +36,7 @@ a:hover {
   width: 70%;
 }
 
-/* header styles */
+/* header */
 
 #header {
   max-width: 800px;
@@ -69,7 +69,14 @@ a:hover {
   color: inherit;
 }
 
-/* gallery styles */
+/* map modal */
+
+#map {
+  height: 400px;
+  width: 80%; 
+}
+
+/* gallery */
 
 .filter-dropdown > .btn,
 .sort-toggle > .btn {
@@ -149,7 +156,7 @@ a:hover {
   height: 2.2rem;
 }
 
-/* comments form styles */
+/* comments form */
 
 #login {
   color: var(--dark-gray);

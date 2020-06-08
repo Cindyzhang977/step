@@ -54,6 +54,9 @@
                 Recommend A Destination
               </a>
             </button>
+            <button type="button" class="btn btn-outline-dark" id="launch-map-btn" data-toggle="modal" data-target="#map-modal">
+              Launch Map
+            </button>
             <div id="fetch-response"></div>
           </div>
         </div>
@@ -96,6 +99,7 @@
           </div>
         </div>
         <!-- gallery -->
+        <div id="map"></div>
         <div class="row" id="gallery">
           <div class="row text-center align-items-center loading-container">
             <div class="spinner-border" role="status">
@@ -218,6 +222,10 @@
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
       integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
       crossorigin="anonymous"
+    ></script>
+    <script async defer 
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWGV5BaNcggJUx4kIXP7OnCO9RgtrwVvM&callback=initMap"
+      type="text/javascript"
     ></script>
   </body>
 </html>
