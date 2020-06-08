@@ -32,7 +32,7 @@ a:hover {
   margin: 30px auto;
   max-width: 1200px;
   padding: 30px 5px;
-  width: 80%;
+  width: 70%;
 }
 
 /* header styles */
@@ -262,4 +262,11 @@ a:hover {
 #load-more-btn:disabled {
   background-color: #E1E7ED;
   color: gray;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) { 
+  #content {
+    width: 85%;
+  }
 }
