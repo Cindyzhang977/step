@@ -188,6 +188,10 @@ a:hover {
   width: 100%;
 }
 
+.comment:hover {
+  background-color: #e6e6cf;
+}
+
 .rec-location {
   font-size: 1.4rem;
   font-weight: 500;
