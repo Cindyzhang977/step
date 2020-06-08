@@ -209,9 +209,9 @@ function deleteComment(cid) {
     url: `/delete-data?id=${id}`,
     success: () => $('.comment').length > 1 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   }).done(() => {
-  if ($('.comment').length === 1) {
-    $('#rec-count').hide()
-  }
+    if ($('.comment').length === 1) {
+      $('#rec-count').hide();
+    }
   })
   
 }

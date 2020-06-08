@@ -170,6 +170,10 @@ a:hover {
   border-color: var(--accent-hover);
 }
 
+#inlineFormInputDescription {
+  min-height: 8rem;
+}
+
 #comments-container {
   margin: 30px auto;
 }
@@ -268,9 +272,14 @@ a:hover {
   color: gray;
 }
 
-/* Small devices (landscape phones, 576px and up) */
-@media (max-width: 576px) { 
+/* Small devices (landscape phones, 576px and below) */
+@media (max-width: 991.98px) { 
   #content {
     width: 85%;
+  }
+
+  #profile-img {
+    height: 180px;
+    width: 180px;
   }
 }

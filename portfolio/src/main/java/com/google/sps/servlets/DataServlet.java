@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  /** Class to wrap around comments array and total number of comments, used to product json */
+  /** Class to wrap around comments array and total number of comments, used to produce json. */
   private class CommentsWrapper {
     private int total = 0; 
     private ArrayList<Comment> comments;
