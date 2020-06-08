@@ -45,7 +45,7 @@ function getCommentId(cid) {
  */
 function createPhoto(photo) {
   return $(`
-    <div id="${photo.epoch}" class="col-lg-4 col-md-6 col-sm-12">
+    <div id="${photo.epoch}" class="col-lg-4 col-md-6 col-xs-12">
       <figure class="figure">
         <div class="figure-img-container">
           <img
