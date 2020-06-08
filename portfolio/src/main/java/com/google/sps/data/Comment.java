@@ -25,12 +25,16 @@ public class Comment {
   private String link;
   private String description;
   private String id;
+  private String userEmail;
+  private String displayedName;
 
-  public Comment(String location, String link, @Nullable String description, String id) {
+  public Comment(String location, String link, @Nullable String description, String id, String userEmail, String displayedName) {
     this.location = location;
     this.link = link;
     this.description = description;
     this.id = id;
+    this.userEmail = userEmail;
+    this.displayedName = displayedName;
 
     if (this.description != null) {
       this.description = this.description.trim();
@@ -51,5 +55,13 @@ public class Comment {
 
   public String getId() {
     return this.id;
+  }
+
+  public String getUserEmail() {
+    return this.userEmail;
+  }
+
+  public String getDisplayedName() {
+    return this.displayedName;
   }
 }
