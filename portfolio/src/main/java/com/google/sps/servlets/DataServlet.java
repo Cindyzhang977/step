@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -86,7 +88,9 @@ public class DataServlet extends HttpServlet {
       String link = (String) e.getProperty("link");
       String description = (String) e.getProperty("description");
       long id = e.getKey().getId();
-      Comment c = new Comment(location, link, description, String.valueOf(id));
+      String userEmail = (String) e.getProperty("userEmail");
+      String displayedName = (String) e.getProperty("displayedName");
+      Comment c = new Comment(location, link, description, String.valueOf(id), userEmail, displayedName);
       comments.add(c);
     }
     this.cursor = results.getCursor();
@@ -105,12 +109,15 @@ public class DataServlet extends HttpServlet {
     String location = request.getParameter("location");
     String link = request.getParameter("link");
     String description = request.getParameter("description");
+    String userEmail = UserServiceFactory.getUserService().getCurrentUser().getEmail();
+    String displayedName = request.getParameter("anonCheck") != null ? request.getParameter("displayedName") : "anon";
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("location", location);
     commentEntity.setProperty("link", link);
     commentEntity.setProperty("description", description);
-
+    commentEntity.setProperty("userEmail", userEmail);
+    commentEntity.setProperty("displayedName", displayedName);
     long timestamp = System.currentTimeMillis();
     commentEntity.setProperty("timestamp", timestamp);
 

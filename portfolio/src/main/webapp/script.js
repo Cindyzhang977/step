@@ -274,9 +274,15 @@ function handleSubmit(e) {
     success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
+  $("#anonCheck"). prop("checked", false);
 }
 
 $('#rec-form').submit(handleSubmit);
+$('#anonCheck-container').click(() => {
+  console.log("anon cehck container")
+  console.log($('#anonCheck').is(':checked'))
+  $('#displayedName').prop('required', !$('#anonCheck').is(':checked'))
+})
 
 /**
  * Check if user is logged in to Google account. 
@@ -284,7 +290,6 @@ $('#rec-form').submit(handleSubmit);
  */
 function checkLogin() {
   fetch('/auth').then(res => res.json()).then(json => {
-    console.log(json);
     if (json.isLoggedIn) {
       $('#rec-form').show();
       $('#login').hide();
