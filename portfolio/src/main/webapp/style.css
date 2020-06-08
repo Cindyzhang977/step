@@ -148,7 +148,20 @@ a:hover {
   height: 2.2rem;
 }
 
-/* comments styles */
+/* comments form styles */
+#login {
+  color: #575757;
+  margin: 16px auto;
+  text-align: center;
+}
+
+#login-btn {
+  background-color: #1b2d45;
+  color: white;
+  margin: 16px auto;
+  width: 300px;
+}
+
 #submit-btn-container {
   justify-content: flex-end;
   margin: auto 4px;
@@ -173,6 +186,13 @@ a:hover {
 #inlineFormInputDescription {
   min-height: 8rem;
 }
+
+#anonCheck-container {
+  color: #575757;
+  margin-left: 12px;
+}
+
+/* comments styles */
 
 #comments-container {
   margin: 30px auto;
@@ -273,6 +293,13 @@ a:hover {
 }
 
 /* Small devices (landscape phones, 576px and below) */
+@media (max-width: 576px) {
+  #login-btn {
+    width: 100%;
+  }
+}
+
+/* Medium devices (tablets, 991.98px and below) */
 @media (max-width: 991.98px) { 
   #content {
     width: 85%;

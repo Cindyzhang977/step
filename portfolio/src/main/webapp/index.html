@@ -109,6 +109,13 @@
       <!-- comments -->
       <div class="container" id="comments-container">
         <h4>Recommend A Destination</h4>
+        <!-- login -->
+        <div id="login">
+          <div>
+            Log in with your Google account to leave a recommendation.
+          </div>
+          <button type="button" class="btn" id="login-btn">Log In</button>
+        </div>
         <!-- comments form -->
         <form id="rec-form" autocomplete="off">
           <div class="form-row align-items-center">
@@ -152,6 +159,14 @@
                 name="description"
                 placeholder="Description (What to do, where specifically to go, general comments, etc.)"
               ></textarea>
+            </div>
+            <div class="form-group col-auto">
+              <label class="sr-only" for="displayedName">Displayed Name</label>
+              <input type="email" class="form-control" id="displayedName" aria-describedby="emailHelp" placeholder="Displayed Name" required>
+            </div>
+            <div class="form-check" id="anonCheck-container">
+              <input type="checkbox" class="form-check-input" id="anonCheck">
+              <label class="form-check-label" for="anonCheck">anonymous</label>
             </div>
             <div class="row" id="submit-btn-container">
               <div class="col-sm-12 col-md-3 my-1" id="submit-btn">
