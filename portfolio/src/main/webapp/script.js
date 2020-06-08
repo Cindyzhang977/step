@@ -263,7 +263,7 @@ function loadComments(type = LoadType.LOAD) {
 $('#load-more-btn').click(() => loadComments(LoadType.APPEND));
 
 /**
- * Make POST request to /data upon submission of recommendation form to add comment to datastore
+ * Make POST request to /data upon submission of recommendation form to add comment to datastore.
  */
 function handleSubmit(e) {
   e.preventDefault();
@@ -278,9 +278,31 @@ function handleSubmit(e) {
 
 $('#rec-form').submit(handleSubmit);
 
+/**
+ * Check if user is logged in to Google account. 
+ * If they are logged in, display comments form, else display button to log in. 
+ */
+function checkLogin() {
+  fetch('/auth').then(res => res.json()).then(json => {
+    console.log(json);
+    if (json.isLoggedIn) {
+      $('#rec-form').show();
+      $('#login').hide();
+      $('#user-email').text(json.userEmail);
+      $('#logout-btn').click(() => window.open(json.url, '_self'))
+    } else {
+      $('#rec-form').hide();
+      $('#login').show();
+      $('#login-btn').click(() => window.open(json.url));
+    }
+  })
+}
+
+
 $(document).ready(() => {
   generatePhotoComponents();
   mapPhotos();
   sortPhotos();
+  checkLogin();
   loadComments(LoadType.LOAD);
 });

@@ -2,6 +2,7 @@
   --navy: #1b2d45;
   --accent: #39bdb8;
   --accent-hover: #32cfc9;
+  --dark-gray: #575757;
 }
 
 html,
@@ -149,8 +150,9 @@ a:hover {
 }
 
 /* comments form styles */
+
 #login {
-  color: #575757;
+  color: var(--dark-gray);
   margin: 16px auto;
   text-align: center;
 }
@@ -188,11 +190,57 @@ a:hover {
 }
 
 #anonCheck-container {
-  color: #575757;
+  color: var(--darkgray);
   margin-left: 12px;
 }
 
-/* comments styles */
+#logged-in-id {
+  align-items: center;
+  margin: 8px 12px;
+}
+
+#logout-btn {
+  border: 1px solid var(--navy);
+  border-radius: 4px;
+  color: var(--navy);
+  margin: auto 12px;
+  padding: 2px 8px;
+}
+
+#logout-btn:hover {
+  background-color: var(--navy);
+  color: white;
+}
+
+/* #rec-form,
+#login {
+  display: none;
+} */
+
+#rec-form {
+  color: var(--dark-gray);
+}
+
+#displayedName {
+  margin-top: 4px;
+}
+
+.rec-location {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.rec-description {
+  padding: 4px 16px;
+}
+
+.rec-description-txt {
+  margin-bottom: 10px;
+  vertical-align: top;
+  white-space: pre;
+}
+
+/* comments */
 
 #comments-container {
   margin: 30px auto;
@@ -214,21 +262,6 @@ a:hover {
 
 .comment:hover {
   background-color: #e6e6cf;
-}
-
-.rec-location {
-  font-size: 1.4rem;
-  font-weight: 500;
-}
-
-.rec-description {
-  padding: 4px 16px;
-}
-
-.rec-description-txt {
-  margin-bottom: 10px;
-  vertical-align: top;
-  white-space: pre;
 }
 
 .empty-link {
