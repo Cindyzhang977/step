@@ -73,6 +73,7 @@ a:hover {
 
 #map {
   height: 400px;
+  margin: auto;
   width: 80%; 
 }
 

@@ -325,7 +325,7 @@ function mapModal() {
             </button>
           </div>
           <div class="modal-body">
-            <div id="map-dummy"></div>
+            <div id="map"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -336,6 +336,7 @@ function mapModal() {
   `);
   console.log("map modal")
   $('#gallery').append(map);
+  initMap();
 }
 
 function initMap() {
