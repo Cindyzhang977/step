@@ -162,7 +162,7 @@ function createComment(comment) {
   return $(`
     <div class="comment">
       <button
-        class="btn btn-block text-left rec-location"
+        class="btn btn-block text-left rec-location container"
         id="btn-${comment.id}"
         type="button"
         data-toggle="collapse"
@@ -170,8 +170,15 @@ function createComment(comment) {
         aria-expanded="false"
         aria-controls="rec-${comment.id}"
       >
-        <i class="fa fa-caret-right"></i>
-        ${comment.location}
+        <div class="row">
+          <div class="col">
+            <i class="fa fa-caret-right"></i>
+            ${comment.location}
+          </div>
+          <div class="col comment-name">
+            ${comment.displayedName}
+          </div>
+        </div>
       </button>
       <div
         id="rec-${comment.id}"
@@ -279,9 +286,7 @@ function handleSubmit(e) {
 
 $('#rec-form').submit(handleSubmit);
 $('#anonCheck-container').click(() => {
-  console.log("anon cehck container")
-  console.log($('#anonCheck').is(':checked'))
-  $('#displayedName').prop('required', !$('#anonCheck').is(':checked'))
+  $('#displayedName').prop('required', !$('#anonCheck').is(':checked'));
 })
 
 /**
@@ -294,7 +299,7 @@ function checkLogin() {
       $('#rec-form').show();
       $('#login').hide();
       $('#user-email').text(json.userEmail);
-      $('#logout-btn').click(() => window.open(json.url, '_self'))
+      $('#logout-btn').click(() => window.open(json.url, '_self'));
     } else {
       $('#rec-form').hide();
       $('#login').show();

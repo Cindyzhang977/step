@@ -220,10 +220,10 @@ a:hover {
   color: white;
 }
 
-/* #rec-form,
+#rec-form,
 #login {
   display: none;
-} */
+}
 
 #rec-form {
   color: var(--dark-gray);
@@ -231,21 +231,6 @@ a:hover {
 
 #displayedName {
   margin-top: 4px;
-}
-
-.rec-location {
-  font-size: 1.4rem;
-  font-weight: 500;
-}
-
-.rec-description {
-  padding: 4px 16px;
-}
-
-.rec-description-txt {
-  margin-bottom: 10px;
-  vertical-align: top;
-  white-space: pre;
 }
 
 /* comments */
@@ -270,6 +255,29 @@ a:hover {
 
 .comment:hover {
   background-color: #e6e6cf;
+}
+
+.rec-location {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.rec-description {
+  padding: 4px 16px;
+}
+
+.rec-description-txt {
+  margin-bottom: 10px;
+  vertical-align: top;
+  white-space: pre;
+}
+
+.comment-name {
+  color: #6ebaba;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-align:right;
 }
 
 .empty-link {
