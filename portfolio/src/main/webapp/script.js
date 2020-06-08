@@ -159,6 +159,7 @@ $('#oldest').click(() => sortPhotos('oldest'));
  */
 function createComment(comment) {
   const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
+  const deleteDisplay = $('#user-email').text() === comment.userEmail ? "block" : "none"
   return $(`
     <div class="comment">
       <button
@@ -197,7 +198,7 @@ function createComment(comment) {
               class=${linkClass}
               >Learn more</a
             >
-            <i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>
+            <i class="fa fa-ban col-2" id="delete-btn-${comment.id}" style="display: ${deleteDisplay};"></i>
           </div>
         </div>
       </div>
@@ -281,7 +282,8 @@ function handleSubmit(e) {
     success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
-  $("#anonCheck"). prop("checked", false);
+  $("#anonCheck").prop("checked", false);
+  $('#displayedName').prop('required', true);
 }
 
 $('#rec-form').submit(handleSubmit);
@@ -290,7 +292,7 @@ $('#anonCheck-container').click(() => {
 })
 
 /**
- * Check if user is logged in to Google account. 
+ * Check if user is logged in to Google account.
  * If they are logged in, display comments form, else display button to log in. 
  */
 function checkLogin() {
