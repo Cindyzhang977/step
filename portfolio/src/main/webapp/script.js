@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { photosData } from './photos-data.js';
+import { photosData } from "./photos-data.js";
 
 /**
  * Supported ways to load comments.
@@ -22,9 +22,9 @@ import { photosData } from './photos-data.js';
  * @enum {string}
  */
 const LoadType = {
-  LOAD: 'load',
-  RELOAD: 'reload',
-  APPEND: 'append',
+  LOAD: "load",
+  RELOAD: "reload",
+  APPEND: "append",
 };
 
 /**
@@ -33,7 +33,7 @@ const LoadType = {
  * @return {number}
  */
 function getCommentId(cid) {
-  const idElems = cid.split('-');
+  const idElems = cid.split("-");
   return Number(idElems[idElems.length - 1]);
 }
 
@@ -103,7 +103,7 @@ const monthToNum = {
 function generatePhotoComponents() {
   for (const photo of photosData) {
     // add epoch time to each photo
-    const date = photo.date.split(' ');
+    const date = photo.date.split(" ");
     const year = date[2];
     const month = monthToNum[date[0]];
     const day = date[1].slice(0, -2);
@@ -122,19 +122,19 @@ function generatePhotoComponents() {
  * @param {string} components the list of specific photo components to display
  */
 function mapPhotos(components = allComponents) {
-  $('#gallery').empty();
-  $('#gallery').append(components);
-  $('#newest').button('toggle');
-  $('#oldest').button('dispose');
+  $("#gallery").empty();
+  $("#gallery").append(components);
+  $("#newest").button("toggle");
+  $("#oldest").button("dispose");
 }
 
 /**
  * Order photos based on date
  * @param order the prefered ording to display photos (newest first vs oldest first)
  */
-function sortPhotos(order = 'newest') {
-  const components = $('#gallery').contents().toArray();
-  if (order == 'oldest') {
+function sortPhotos(order = "newest") {
+  const components = $("#gallery").contents().toArray();
+  if (order == "oldest") {
     components.sort((a, b) => a.id - b.id);
   } else {
     components.sort((a, b) => b.id - a.id);
@@ -157,14 +157,14 @@ function filterPhotos(filter = null) {
 }
 
 // eventListeners for filtering photos based on an attribute
-$('#filter-beach').click(() => filterPhotos('beach'));
-$('#filter-sunset').click(() => filterPhotos('sunset'));
-$('#filter-mountain').click(() => filterPhotos('mountain'));
-$('#filter-none').click(() => filterPhotos());
+$("#filter-beach").click(() => filterPhotos("beach"));
+$("#filter-sunset").click(() => filterPhotos("sunset"));
+$("#filter-mountain").click(() => filterPhotos("mountain"));
+$("#filter-none").click(() => filterPhotos());
 
 // eventListeners for sorting photos
-$('#newest').click(() => sortPhotos('newest'));
-$('#oldest').click(() => sortPhotos('oldest'));
+$("#newest").click(() => sortPhotos("newest"));
+$("#oldest").click(() => sortPhotos("oldest"));
 
 /**
  * Create comment component with location, description, and link
@@ -172,11 +172,11 @@ $('#oldest').click(() => sortPhotos('oldest'));
  * @return {JQuery}
  */
 function createComment(comment) {
-  const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
+  const linkClass = `"rec-link col-10${comment.link ? "" : " empty-link"}"`;
   const deleteButton =
-    $('#user-email').text() === comment.userEmail
+    $("#user-email").text() === comment.userEmail
       ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>`
-      : '';
+      : "";
 
   return $(`
     <div class="comment">
@@ -190,11 +190,11 @@ function createComment(comment) {
         aria-controls="rec-${comment.id}"
       >
         <div class="row">
-          <div class="col">
+          <div class="col-md-6 col-sm-12">
             <i class="fa fa-caret-right"></i>
             ${comment.location}
           </div>
-          <div class="col comment-name">
+          <div class="col-md-6 col-sm-12 comment-name">
             ${comment.displayedName}
           </div>
         </div>
@@ -206,7 +206,7 @@ function createComment(comment) {
       >
         <div class="rec-description">
           <div class="rec-description-txt">${
-            comment.description || 'No Description.'
+            comment.description || "No Description."
           }</div>
           <div class="row">
             <a
@@ -231,15 +231,15 @@ function createComment(comment) {
 function deleteComment(cid) {
   const id = getCommentId(cid);
   $.ajax({
-    type: 'POST',
+    type: "POST",
     url: `/delete-data?id=${id}`,
     success: () =>
-      $('.comment').length > 1
+      $(".comment").length > 1
         ? loadComments(LoadType.RELOAD)
         : loadComments(LoadType.LOAD),
   }).done(() => {
-    if ($('.comment').length === 1) {
-      $('#rec-count').hide();
+    if ($(".comment").length === 1) {
+      $("#rec-count").hide();
     }
   });
 }
@@ -249,7 +249,7 @@ function deleteComment(cid) {
  * @param {string} type the request parameter
  */
 function loadComments(type = LoadType.LOAD) {
-  const numComments = $('.comment').length;
+  const numComments = $(".comment").length;
   const comments = [];
   const commentIds = [];
   fetch(`/data?type=${type}&numComments=${numComments}`)
@@ -257,10 +257,10 @@ function loadComments(type = LoadType.LOAD) {
     .then((json) => {
       // indicate if there are no comments
       if (jQuery.isEmptyObject(json.comments)) {
-        $('#comments')
+        $("#comments")
           .children()
           .replaceWith('<div class="empty-notice">No Recommendations</div>');
-        $('#load-more-btn').prop('disabled', true);
+        $("#load-more-btn").prop("disabled", true);
         return;
       }
 
@@ -271,28 +271,28 @@ function loadComments(type = LoadType.LOAD) {
         commentIds.push(`btn-${comment.id}`);
       }
       if (type === LoadType.LOAD || type === LoadType.RELOAD) {
-        $('#comments').empty();
+        $("#comments").empty();
       }
-      $('#comments').append(comments);
+      $("#comments").append(comments);
 
       // comments count & load more button
-      const numLoaded = $('.comment').length;
-      $('#rec-count').show();
-      $('#rec-count').text(`Comments: ${numLoaded}/${json.total}`);
-      $('#load-more-btn').prop('disabled', numLoaded === json.total);
+      const numLoaded = $(".comment").length;
+      $("#rec-count").show();
+      $("#rec-count").text(`Comments: ${numLoaded}/${json.total}`);
+      $("#load-more-btn").prop("disabled", numLoaded === json.total);
     })
     .then(() => {
       // add individual event listeners per comment
       for (const cid of commentIds) {
         $(`#${cid}`).click(() => {
-          $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
+          $(`#${cid}`).find(".fa-caret-right").toggleClass("rotated");
         });
         $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
 }
 
-$('#load-more-btn').click(() => loadComments(LoadType.APPEND));
+$("#load-more-btn").click(() => loadComments(LoadType.APPEND));
 
 /**
  * Make POST request to /data upon submission of recommendation form to add comment to datastore.
@@ -300,22 +300,22 @@ $('#load-more-btn').click(() => loadComments(LoadType.APPEND));
 function handleSubmit(e) {
   e.preventDefault();
   $.ajax({
-    type: 'POST',
-    url: '/data',
+    type: "POST",
+    url: "/data",
     data: $(this).serialize(),
     success: () =>
-      $('.comment').length > 0
+      $(".comment").length > 0
         ? loadComments(LoadType.RELOAD)
         : loadComments(LoadType.LOAD),
   });
-  $(this).find('input,textarea').val('');
-  $('#anonCheck').prop('checked', false);
-  $('#displayedName').prop('required', true);
+  $(this).find("input,textarea").val("");
+  $("#anonCheck").prop("checked", false);
+  $("#displayedName").prop("required", true);
 }
 
-$('#rec-form').submit(handleSubmit);
-$('#anonCheck-container').click(() => {
-  $('#displayedName').prop('required', !$('#anonCheck').prop('checked'));
+$("#rec-form").submit(handleSubmit);
+$("#anonCheck-container").click(() => {
+  $("#displayedName").prop("required", !$("#anonCheck").prop("checked"));
 });
 
 /**
@@ -323,35 +323,35 @@ $('#anonCheck-container').click(() => {
  * If they are logged in, display comments form, else display button to log in.
  */
 function checkLogin() {
-  fetch('/auth')
+  fetch("/auth")
     .then((res) => res.json())
     .then((json) => {
       if (json.isLoggedIn) {
-        $('#rec-form').show();
-        $('#login').hide();
-        $('#user-email').text(json.userEmail);
-        $('#logout-btn').click(() => window.open(json.url, '_self'));
+        $("#rec-form").show();
+        $("#login").hide();
+        $("#user-email").text(json.userEmail);
+        $("#logout-btn").click(() => window.open(json.url, "_self"));
       } else {
-        $('#rec-form').hide();
-        $('#login').show();
-        $('#login-btn').click(() => window.open(json.url, '_self'));
+        $("#rec-form").hide();
+        $("#login").show();
+        $("#login-btn").click(() => window.open(json.url, "_self"));
       }
     });
 }
 
-// ref: https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content 
-$('#map-modal').on('show.bs.modal', function (event) {
+// ref: https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content
+$("#map-modal").on("show.bs.modal", function (event) {
   // button that triggered show modal event
   const button = $(event.relatedTarget);
 
-  // get data passed by the button 
-  const location = button.data('location'); 
-  const lat = button.data('lat');
-  const lng = button.data('lng');
+  // get data passed by the button
+  const location = button.data("location");
+  const lat = button.data("lat");
+  const lng = button.data("lng");
 
-  // set content of modal based on the button pressed 
+  // set content of modal based on the button pressed
   const modal = $(this);
-  modal.find('.modal-title').text(location);
+  modal.find(".modal-title").text(location);
   initMap(lat, lng);
 });
 
@@ -362,7 +362,7 @@ $('#map-modal').on('show.bs.modal', function (event) {
  */
 function initMap(latitude, longitude) {
   const location = { lat: latitude, lng: longitude };
-  const map = new google.maps.Map(document.getElementById('map'), {
+  const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 16,
     center: location,
   });
