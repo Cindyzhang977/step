@@ -175,7 +175,15 @@ function createComment(comment) {
   const linkClass = `"rec-link col-10${comment.link ? "" : " empty-link"}"`;
   const deleteButton =
     $("#user-email").text() === comment.userEmail
-      ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>`
+      ? `
+        <i 
+          class="fa fa-ban col-2" 
+          id="delete-btn-${comment.id}" 
+          data-toggle="tooltip" 
+          data-placement="top" 
+          title="delete recommendation"
+        ></i>
+        `
       : "";
 
   return $(`
