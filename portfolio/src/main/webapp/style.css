@@ -372,6 +372,10 @@ a:hover {
   padding: 8px 0;
 }
 
+#load-more-btn-txt {
+  display: inline;
+}
+
 #load-more-btn:hover {
   background-color: #e1eded;
 }

@@ -249,6 +249,8 @@ function deleteComment(cid) {
  * @param {string} type the request parameter
  */
 function loadComments(type = LoadType.LOAD) {
+  $('#load-more-btn-txt').text('Loading . . .');
+
   const numComments = $(".comment").length;
   const comments = [];
   const commentIds = [];
@@ -289,10 +291,12 @@ function loadComments(type = LoadType.LOAD) {
         });
         $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
+
+      $('#load-more-btn-txt').text('Load More');
     });
 }
 
-$("#load-more-btn").click(() => loadComments(LoadType.APPEND));
+$('#load-more-btn').click(() => loadComments(LoadType.APPEND));
 
 /**
  * Make POST request to /data upon submission of recommendation form to add comment to datastore.
