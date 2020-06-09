@@ -159,7 +159,8 @@ $('#oldest').click(() => sortPhotos('oldest'));
  */
 function createComment(comment) {
   const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
-  const deleteDisplay = $('#user-email').text() === comment.userEmail ? "block" : "none"
+  const deleteButton = $('#user-email').text() === comment.userEmail ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>` : '';
+
   return $(`
     <div class="comment">
       <button
@@ -198,7 +199,7 @@ function createComment(comment) {
               class=${linkClass}
               >Learn more</a
             >
-            <i class="fa fa-ban col-2" id="delete-btn-${comment.id}" style="display: ${deleteDisplay};"></i>
+            ${deleteButton}
           </div>
         </div>
       </div>
@@ -282,13 +283,13 @@ function handleSubmit(e) {
     success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
-  $("#anonCheck").prop("checked", false);
+  $('#anonCheck').prop('checked', false);
   $('#displayedName').prop('required', true);
 }
 
 $('#rec-form').submit(handleSubmit);
 $('#anonCheck-container').click(() => {
-  $('#displayedName').prop('required', !$('#anonCheck').is(':checked'));
+  $('#displayedName').prop('required', !$('#anonCheck').prop('checked'));
 })
 
 /**

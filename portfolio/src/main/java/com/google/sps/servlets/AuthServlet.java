@@ -41,10 +41,11 @@ public class AuthServlet extends HttpServlet {
     }
   }
 
+  private final UserService userService = UserServiceFactory.getUserService();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     AuthStatus status;
-    UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
       String urlToRedirectToAfterUserLogsOut = "/";
