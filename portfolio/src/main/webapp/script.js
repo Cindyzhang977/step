@@ -53,7 +53,16 @@ function createPhoto(photo) {
             alt="${photo.location}"
           />
           <div class="overlay">
-            <button type="button" class="btn btn-outline-secondary view-map-btn">
+            <button 
+              type="button" 
+              id="btn-${photo.epoch}" 
+              class="btn btn-outline-secondary view-map-btn"
+              data-toggle="modal" 
+              data-target="#map-modal" 
+              data-location="${photo.location}"
+              data-lat="${photo.lat}"
+              data-lng="${photo.lng}"
+            >
               View Map
             </button>
           </div>
@@ -89,7 +98,7 @@ const monthToNum = {
 };
 
 /**
- * Generate html components for each photo in photosData
+ * Generate html components for each photo in photosData.
  */
 function generatePhotoComponents() {
   for (const photo of photosData) {
@@ -327,45 +336,29 @@ function checkLogin() {
     });
 }
 
-/**
- * Launch Modal with Google maps pinned at the photo's location.
- */
-function mapModal() {
-  const map = $(`
-    <div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="map-modal" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="map-modal-title">PHOTO LOCATION</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div id="map"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-  console.log('map modal');
-  $('#gallery').append(map);
-  initMap();
-}
+$('#map-modal').on('show.bs.modal', function (event) {
+  const button = $(event.relatedTarget);
+  const location = button.data('location');
+  const lat = button.data('lat');
+  const lng = button.data('lng');
+  const modal = $(this);
+  modal.find('.modal-title').text(location);
+  initMap(lat, lng);
+});
 
-function initMap() {
-  const location = { lat: 37.182922, lng: -122.392803 };
+/**
+ * use Google maps API to create a map with a marker at the given coordinates
+ * @param {number} latitude
+ * @param {number} longitude
+ */
+function initMap(latitude, longitude) {
+  const location = { lat: latitude, lng: longitude };
   const map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
+    zoom: 16,
     center: location,
   });
   const marker = new google.maps.Marker({ position: location, map: map });
 }
-
-$('#launch-map-btn').click(mapModal);
 
 $(document).ready(() => {
   generatePhotoComponents();

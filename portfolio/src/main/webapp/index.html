@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>My Portfolio</title>
     <link
       rel="stylesheet"
@@ -54,10 +54,6 @@
                 Recommend A Destination
               </a>
             </button>
-            <button type="button" class="btn btn-outline-dark" id="launch-map-btn" data-toggle="modal" data-target="#map-modal">
-              Launch Map
-            </button>
-            <div id="fetch-response"></div>
           </div>
         </div>
       </div>
@@ -99,6 +95,42 @@
           </div>
         </div>
         <!-- gallery -->
+        <div
+          class="modal fade"
+          id="map-modal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="map-modal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="map-modal-title">PHOTO LOCATION</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="map"></div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row" id="gallery">
           <div class="row text-center align-items-center loading-container">
             <div class="spinner-border" role="status">
@@ -116,8 +148,8 @@
         <div id="login">
           <button type="button" class="btn container">
             <div class="row" id="login-btn">
-                <img src='imgs/google-logo.png' id="google-logo"/>
-                <div >Log In</div>
+              <img src="imgs/google-logo.png" id="google-logo" />
+              <div>Log In</div>
             </div>
           </button>
           <div>
@@ -127,7 +159,7 @@
         <!-- comments form -->
         <form id="rec-form" autocomplete="off">
           <div id="logged-in-id" class="row">
-            <div>Logged in as <span id='user-email'></span></div>
+            <div>Logged in as <span id="user-email"></span></div>
             <button type="button" class="btn" id="logout-btn">Log Out</button>
           </div>
           <div class="form-row align-items-center">
@@ -174,10 +206,23 @@
             </div>
             <div class="form-group col-auto">
               <label class="sr-only" for="displayedName">Displayed Name</label>
-              <input type="text" class="form-control" id="displayedName" name="displayedName" placeholder="Displayed Name" required>
+              <input
+                type="text"
+                class="form-control"
+                id="displayedName"
+                name="displayedName"
+                placeholder="Displayed Name"
+                required
+              />
             </div>
             <div class="form-check" id="anonCheck-container">
-              <input type="checkbox" class="form-check-input" id="anonCheck" name="anonCheck" value="anon">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="anonCheck"
+                name="anonCheck"
+                value="anon"
+              />
               <label class="form-check-label" for="anonCheck">anonymous</label>
             </div>
             <div class="row" id="submit-btn-container">
@@ -222,7 +267,9 @@
       integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
       crossorigin="anonymous"
     ></script>
-    <script async defer 
+    <script
+      async
+      defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWGV5BaNcggJUx4kIXP7OnCO9RgtrwVvM"
       type="text/javascript"
     ></script>
