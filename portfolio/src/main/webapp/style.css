@@ -392,6 +392,25 @@ a:hover {
   color: gray;
 }
 
+.delete-modal-btn {
+  width: 72px;
+}
+
+#confirm-delete {
+  border: 1px solid #a10d0d;
+  color: #a10d0d;
+}
+
+#confirm-delete:hover {
+  background-color: #a10d0d;
+  color: white;
+}
+
+#rec-delete {
+  color: var(--navy);
+  font-style: italic;
+}
+
 /* Small devices (landscape phones, 576px and below) */
 @media (max-width: 576px) {
   #login-btn {
