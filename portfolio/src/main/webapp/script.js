@@ -321,7 +321,6 @@ function loadComments(type = LoadType.LOAD) {
         $(`#${cid}`).click(() => {
           $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
         });
-        // $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
 
       $('#load-more-btn-txt').text('Load More');
