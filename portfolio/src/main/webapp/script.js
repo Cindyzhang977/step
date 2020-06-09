@@ -334,7 +334,7 @@ function checkLogin() {
       } else {
         $('#rec-form').hide();
         $('#login').show();
-        $('#login-btn').click(() => window.open(json.url));
+        $('#login-btn').click(() => window.open(json.url, '_self'));
       }
     });
 }
