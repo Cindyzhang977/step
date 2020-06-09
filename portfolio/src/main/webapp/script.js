@@ -16,8 +16,8 @@ import { photosData } from './photos-data.js';
 
 /**
  * Supported ways to load comments.
- * LOAD: load the default number of comments 
- * RELOAD: reload the existing number of comments 
+ * LOAD: load the default number of comments
+ * RELOAD: reload the existing number of comments
  * APPEND: load an additional batch of comments which is then appended to current comments
  * @enum {string}
  */
@@ -25,8 +25,7 @@ const LoadType = {
   LOAD: 'load',
   RELOAD: 'reload',
   APPEND: 'append',
-}
-
+};
 
 /**
  * return the datastore id of a comment
@@ -53,6 +52,20 @@ function createPhoto(photo) {
             class="img-fluid rounded"
             alt="${photo.location}"
           />
+          <div class="overlay">
+            <button 
+              type="button" 
+              id="btn-${photo.epoch}" 
+              class="btn btn-outline-secondary view-map-btn"
+              data-toggle="modal" 
+              data-target="#map-modal" 
+              data-location="${photo.location}"
+              data-lat="${photo.lat}"
+              data-lng="${photo.lng}"
+            >
+              View Map
+            </button>
+          </div>
         </div>
         <div class="row figure-caption-container">
           <figcaption class="figure-caption photo-location">
@@ -85,7 +98,7 @@ const monthToNum = {
 };
 
 /**
- * Generate html components for each photo in photosData
+ * Generate html components for each photo in photosData.
  */
 function generatePhotoComponents() {
   for (const photo of photosData) {
@@ -96,6 +109,7 @@ function generatePhotoComponents() {
     const day = date[1].slice(0, -2);
     const epochTime = new Date(year, month, day).getTime() / 1000;
     photo.epoch = epochTime;
+
     // create photo component
     const component = createPhoto(photo);
     photo.component = component;
@@ -159,7 +173,11 @@ $('#oldest').click(() => sortPhotos('oldest'));
  */
 function createComment(comment) {
   const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
-  const deleteButton = $('#user-email').text() === comment.userEmail ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>` : '';
+  const deleteButton =
+    $('#user-email').text() === comment.userEmail
+      ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>`
+      : '';
+
   return $(`
     <div class="comment">
       <button
@@ -215,13 +233,15 @@ function deleteComment(cid) {
   $.ajax({
     type: 'POST',
     url: `/delete-data?id=${id}`,
-    success: () => $('.comment').length > 1 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
+    success: () =>
+      $('.comment').length > 1
+        ? loadComments(LoadType.RELOAD)
+        : loadComments(LoadType.LOAD),
   }).done(() => {
     if ($('.comment').length === 1) {
       $('#rec-count').hide();
     }
-  })
-  
+  });
 }
 
 /**
@@ -237,11 +257,14 @@ function loadComments(type = LoadType.LOAD) {
     .then((json) => {
       // indicate if there are no comments
       if (jQuery.isEmptyObject(json.comments)) {
-        $('#comments').children().replaceWith('<div class="empty-notice">No Recommendations</div>')
+        $('#comments')
+          .children()
+          .replaceWith('<div class="empty-notice">No Recommendations</div>');
         $('#load-more-btn').prop('disabled', true);
         return;
       }
-      // add comments to DOM 
+
+      // add comments to DOM
       for (const comment of json.comments) {
         const component = createComment(comment);
         comments.push(component);
@@ -251,9 +274,10 @@ function loadComments(type = LoadType.LOAD) {
         $('#comments').empty();
       }
       $('#comments').append(comments);
-      // comments count & load more button 
+
+      // comments count & load more button
       const numLoaded = $('.comment').length;
-      $('#rec-count').show()
+      $('#rec-count').show();
       $('#rec-count').text(`Comments: ${numLoaded}/${json.total}`);
       $('#load-more-btn').prop('disabled', numLoaded === json.total);
     })
@@ -262,7 +286,7 @@ function loadComments(type = LoadType.LOAD) {
       for (const cid of commentIds) {
         $(`#${cid}`).click(() => {
           $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
-        })
+        });
         $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
@@ -279,7 +303,10 @@ function handleSubmit(e) {
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
+    success: () =>
+      $('.comment').length > 0
+        ? loadComments(LoadType.RELOAD)
+        : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
   $('#anonCheck').prop('checked', false);
@@ -289,27 +316,58 @@ function handleSubmit(e) {
 $('#rec-form').submit(handleSubmit);
 $('#anonCheck-container').click(() => {
   $('#displayedName').prop('required', !$('#anonCheck').prop('checked'));
-})
+});
 
 /**
  * Check if user is logged in to Google account.
- * If they are logged in, display comments form, else display button to log in. 
+ * If they are logged in, display comments form, else display button to log in.
  */
 function checkLogin() {
-  fetch('/auth').then(res => res.json()).then(json => {
-    if (json.isLoggedIn) {
-      $('#rec-form').show();
-      $('#login').hide();
-      $('#user-email').text(json.userEmail);
-      $('#logout-btn').click(() => window.open(json.url, '_self'));
-    } else {
-      $('#rec-form').hide();
-      $('#login').show();
-      $('#login-btn').click(() => window.open(json.url));
-    }
-  })
+  fetch('/auth')
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.isLoggedIn) {
+        $('#rec-form').show();
+        $('#login').hide();
+        $('#user-email').text(json.userEmail);
+        $('#logout-btn').click(() => window.open(json.url, '_self'));
+      } else {
+        $('#rec-form').hide();
+        $('#login').show();
+        $('#login-btn').click(() => window.open(json.url));
+      }
+    });
 }
 
+// ref: https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content 
+$('#map-modal').on('show.bs.modal', function (event) {
+  // button that triggered show modal event
+  const button = $(event.relatedTarget);
+
+  // get data passed by the button 
+  const location = button.data('location'); 
+  const lat = button.data('lat');
+  const lng = button.data('lng');
+
+  // set content of modal based on the button pressed 
+  const modal = $(this);
+  modal.find('.modal-title').text(location);
+  initMap(lat, lng);
+});
+
+/**
+ * use Google maps API to create a map with a marker at the given coordinates
+ * @param {number} latitude
+ * @param {number} longitude
+ */
+function initMap(latitude, longitude) {
+  const location = { lat: latitude, lng: longitude };
+  const map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 16,
+    center: location,
+  });
+  const marker = new google.maps.Marker({ position: location, map });
+}
 
 $(document).ready(() => {
   generatePhotoComponents();

@@ -36,7 +36,7 @@ a:hover {
   width: 70%;
 }
 
-/* header styles */
+/* header */
 
 #header {
   max-width: 800px;
@@ -69,7 +69,19 @@ a:hover {
   color: inherit;
 }
 
-/* gallery styles */
+/* map modal */
+
+#map {
+  height: 500px;
+  margin: auto;
+  width: 90%;
+}
+
+#map-modal-title {
+  color: var(--navy);
+}
+
+/* gallery */
 
 .filter-dropdown > .btn,
 .sort-toggle > .btn {
@@ -96,6 +108,7 @@ a:hover {
   border-radius: 3px;
   max-height: 420px;
   width: 100%;
+  position: relative;
   overflow: hidden;
 }
 
@@ -131,6 +144,32 @@ a:hover {
   margin-top: 100px;
 }
 
+.overlay {
+  background-color: var(--navy);
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  transition: 0.5s ease;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.figure-img-container:hover .overlay {
+  opacity: 0.5;
+}
+
+.view-map-btn {
+  color: white;
+  border-color: white;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* loading styles */
 
 #comments,
@@ -149,7 +188,7 @@ a:hover {
   height: 2.2rem;
 }
 
-/* comments form styles */
+/* comments form */
 
 #login {
   color: var(--dark-gray);
@@ -277,7 +316,7 @@ a:hover {
   font-style: italic;
   font-weight: 400;
   font-size: 1.2rem;
-  text-align:right;
+  text-align: right;
 }
 
 .empty-link {
@@ -337,7 +376,7 @@ a:hover {
 }
 
 #load-more-btn:disabled {
-  background-color: #E1E7ED;
+  background-color: #e1e7ed;
   color: gray;
 }
 
@@ -346,10 +385,14 @@ a:hover {
   #login-btn {
     width: 100%;
   }
+
+  #map {
+    height: 400px;
+  }
 }
 
 /* Medium devices (tablets, 991.98px and below) */
-@media (max-width: 991.98px) { 
+@media (max-width: 991.98px) {
   #content {
     width: 85%;
   }

@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 
 /**
  * Class representing the a destination recommendation comment.
- * Contains location and link.
  */
 public class Comment {
   private String location;
