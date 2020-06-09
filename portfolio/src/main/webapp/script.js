@@ -16,8 +16,8 @@ import { photosData } from './photos-data.js';
 
 /**
  * Supported ways to load comments.
- * LOAD: load the default number of comments 
- * RELOAD: reload the existing number of comments 
+ * LOAD: load the default number of comments
+ * RELOAD: reload the existing number of comments
  * APPEND: load an additional batch of comments which is then appended to current comments
  * @enum {string}
  */
@@ -25,8 +25,7 @@ const LoadType = {
   LOAD: 'load',
   RELOAD: 'reload',
   APPEND: 'append',
-}
-
+};
 
 /**
  * return the datastore id of a comment
@@ -53,6 +52,11 @@ function createPhoto(photo) {
             class="img-fluid rounded"
             alt="${photo.location}"
           />
+          <div class="overlay">
+            <button type="button" class="btn btn-outline-secondary view-map-btn">
+              View Map
+            </button>
+          </div>
         </div>
         <div class="row figure-caption-container">
           <figcaption class="figure-caption photo-location">
@@ -159,7 +163,10 @@ $('#oldest').click(() => sortPhotos('oldest'));
  */
 function createComment(comment) {
   const linkClass = `"rec-link col-10${comment.link ? '' : ' empty-link'}"`;
-  const deleteButton = $('#user-email').text() === comment.userEmail ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>` : '';
+  const deleteButton =
+    $('#user-email').text() === comment.userEmail
+      ? `<i class="fa fa-ban col-2" id="delete-btn-${comment.id}"></i>`
+      : '';
 
   return $(`
     <div class="comment">
@@ -216,13 +223,15 @@ function deleteComment(cid) {
   $.ajax({
     type: 'POST',
     url: `/delete-data?id=${id}`,
-    success: () => $('.comment').length > 1 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
+    success: () =>
+      $('.comment').length > 1
+        ? loadComments(LoadType.RELOAD)
+        : loadComments(LoadType.LOAD),
   }).done(() => {
     if ($('.comment').length === 1) {
       $('#rec-count').hide();
     }
-  })
-  
+  });
 }
 
 /**
@@ -238,11 +247,13 @@ function loadComments(type = LoadType.LOAD) {
     .then((json) => {
       // indicate if there are no comments
       if (jQuery.isEmptyObject(json.comments)) {
-        $('#comments').children().replaceWith('<div class="empty-notice">No Recommendations</div>')
+        $('#comments')
+          .children()
+          .replaceWith('<div class="empty-notice">No Recommendations</div>');
         $('#load-more-btn').prop('disabled', true);
         return;
       }
-      // add comments to DOM 
+      // add comments to DOM
       for (const comment of json.comments) {
         const component = createComment(comment);
         comments.push(component);
@@ -252,9 +263,9 @@ function loadComments(type = LoadType.LOAD) {
         $('#comments').empty();
       }
       $('#comments').append(comments);
-      // comments count & load more button 
+      // comments count & load more button
       const numLoaded = $('.comment').length;
-      $('#rec-count').show()
+      $('#rec-count').show();
       $('#rec-count').text(`Comments: ${numLoaded}/${json.total}`);
       $('#load-more-btn').prop('disabled', numLoaded === json.total);
     })
@@ -263,7 +274,7 @@ function loadComments(type = LoadType.LOAD) {
       for (const cid of commentIds) {
         $(`#${cid}`).click(() => {
           $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
-        })
+        });
         $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
     });
@@ -280,7 +291,10 @@ function handleSubmit(e) {
     type: 'POST',
     url: '/data',
     data: $(this).serialize(),
-    success: () => $('.comment').length > 0 ? loadComments(LoadType.RELOAD) : loadComments(LoadType.LOAD),
+    success: () =>
+      $('.comment').length > 0
+        ? loadComments(LoadType.RELOAD)
+        : loadComments(LoadType.LOAD),
   });
   $(this).find('input,textarea').val('');
   $('#anonCheck').prop('checked', false);
@@ -290,32 +304,34 @@ function handleSubmit(e) {
 $('#rec-form').submit(handleSubmit);
 $('#anonCheck-container').click(() => {
   $('#displayedName').prop('required', !$('#anonCheck').prop('checked'));
-})
+});
 
 /**
  * Check if user is logged in to Google account.
- * If they are logged in, display comments form, else display button to log in. 
+ * If they are logged in, display comments form, else display button to log in.
  */
 function checkLogin() {
-  fetch('/auth').then(res => res.json()).then(json => {
-    if (json.isLoggedIn) {
-      $('#rec-form').show();
-      $('#login').hide();
-      $('#user-email').text(json.userEmail);
-      $('#logout-btn').click(() => window.open(json.url, '_self'));
-    } else {
-      $('#rec-form').hide();
-      $('#login').show();
-      $('#login-btn').click(() => window.open(json.url));
-    }
-  })
+  fetch('/auth')
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.isLoggedIn) {
+        $('#rec-form').show();
+        $('#login').hide();
+        $('#user-email').text(json.userEmail);
+        $('#logout-btn').click(() => window.open(json.url, '_self'));
+      } else {
+        $('#rec-form').hide();
+        $('#login').show();
+        $('#login-btn').click(() => window.open(json.url));
+      }
+    });
 }
 
 /**
  * Launch Modal with Google maps pinned at the photo's location.
  */
 function mapModal() {
-  const map =  $(`
+  const map = $(`
     <div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="map-modal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -335,22 +351,21 @@ function mapModal() {
       </div>
     </div>
   `);
-  console.log("map modal")
+  console.log('map modal');
   $('#gallery').append(map);
   initMap();
 }
 
 function initMap() {
-  // The location of Uluru
-  var uluru = {lat: -25.344, lng: 131.036};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: uluru});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: uluru, map: map});
+  const location = { lat: 37.182922, lng: -122.392803 };
+  const map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: location,
+  });
+  const marker = new google.maps.Marker({ position: location, map: map });
 }
 
-$('#launch-map-btn').click(mapModal)
+$('#launch-map-btn').click(mapModal);
 
 $(document).ready(() => {
   generatePhotoComponents();
