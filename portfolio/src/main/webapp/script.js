@@ -182,6 +182,7 @@ function createComment(comment) {
           data-toggle="modal"
           data-target="#delete-modal" 
           data-location="${comment.location}"
+          data-cid="${comment.id}"
         >
           <i 
             class="fa fa-ban" 
@@ -244,10 +245,10 @@ function createComment(comment) {
  * @param {string} cid comment id used to distinguish each unique comment
  */
 function deleteComment(cid) {
-  const id = getCommentId(cid);
+  // const id = getCommentId(cid);
   $.ajax({
     type: 'POST',
-    url: `/delete-data?id=${id}`,
+    url: `/delete-data?id=${cid}`,
     success: () =>
       $('.comment').length > 1
         ? loadComments(LoadType.RELOAD)
@@ -266,10 +267,13 @@ $('#delete-modal').on('show.bs.modal', function (event) {
 
   // get data passed by the button
   const location = button.data('location');
+  const cid = button.data('cid');
 
   // set content of modal based on the button pressed
   const modal = $(this);
-  modal.find('#delete-rec').text(location);
+  modal.find('#rec-delete').text(location);
+
+  $('#confirm-delete').click(() => deleteComment(cid));
 });
 
 /**
@@ -317,7 +321,7 @@ function loadComments(type = LoadType.LOAD) {
         $(`#${cid}`).click(() => {
           $(`#${cid}`).find('.fa-caret-right').toggleClass('rotated');
         });
-        $(`#delete-${cid}`).click(() => deleteComment(cid));
+        // $(`#delete-${cid}`).click(() => deleteComment(cid));
       }
 
       $('#load-more-btn-txt').text('Load More');
