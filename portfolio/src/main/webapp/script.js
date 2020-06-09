@@ -109,6 +109,7 @@ function generatePhotoComponents() {
     const day = date[1].slice(0, -2);
     const epochTime = new Date(year, month, day).getTime() / 1000;
     photo.epoch = epochTime;
+
     // create photo component
     const component = createPhoto(photo);
     photo.component = component;
@@ -262,6 +263,7 @@ function loadComments(type = LoadType.LOAD) {
         $('#load-more-btn').prop('disabled', true);
         return;
       }
+
       // add comments to DOM
       for (const comment of json.comments) {
         const component = createComment(comment);
@@ -272,6 +274,7 @@ function loadComments(type = LoadType.LOAD) {
         $('#comments').empty();
       }
       $('#comments').append(comments);
+
       // comments count & load more button
       const numLoaded = $('.comment').length;
       $('#rec-count').show();
@@ -336,11 +339,17 @@ function checkLogin() {
     });
 }
 
+// ref: https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content 
 $('#map-modal').on('show.bs.modal', function (event) {
+  // button that triggered show modal event
   const button = $(event.relatedTarget);
-  const location = button.data('location');
+
+  // get data passed by the button 
+  const location = button.data('location'); 
   const lat = button.data('lat');
   const lng = button.data('lng');
+
+  // set content of modal based on the button pressed 
   const modal = $(this);
   modal.find('.modal-title').text(location);
   initMap(lat, lng);
@@ -357,7 +366,7 @@ function initMap(latitude, longitude) {
     zoom: 16,
     center: location,
   });
-  const marker = new google.maps.Marker({ position: location, map: map });
+  const marker = new google.maps.Marker({ position: location, map });
 }
 
 $(document).ready(() => {
