@@ -208,6 +208,7 @@ a:hover {
 
 #google-logo {
   margin-right: 12px;
+  height: 24px;
   width: 24px;
 }
 
@@ -384,6 +385,10 @@ a:hover {
 @media (max-width: 576px) {
   #login-btn {
     width: 100%;
+  }
+
+  .comment-name {
+    text-align: left;
   }
 
   #map {
