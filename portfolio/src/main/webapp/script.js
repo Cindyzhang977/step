@@ -28,16 +28,6 @@ const LoadType = {
 };
 
 /**
- * return the datastore id of a comment
- * @param {string} cid the id attribute of a comment html component
- * @return {number}
- */
-function getCommentId(cid) {
-  const idElems = cid.split('-');
-  return Number(idElems[idElems.length - 1]);
-}
-
-/**
  * Create photo component with caption
  * @param {Photo} photo a Photo object that contains the data for a photo html component
  * @return {JQuery}
@@ -245,7 +235,6 @@ function createComment(comment) {
  * @param {string} cid comment id used to distinguish each unique comment
  */
 function deleteComment(cid) {
-  // const id = getCommentId(cid);
   $.ajax({
     type: 'POST',
     url: `/delete-data?id=${cid}`,
