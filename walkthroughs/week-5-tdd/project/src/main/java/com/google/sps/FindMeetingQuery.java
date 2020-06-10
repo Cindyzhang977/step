@@ -21,11 +21,12 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    Collection<String> attendees = request.getAttendees();
-    long duration = request.getDuration();
 
-    // create collection of unavailable times 
+  /** 
+   * Return list of unavialable times to schedule the meeting. 
+   * List of TimeRanges is in sorted order from earliest to latest start time.
+   */
+  private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees) {
     HashSet<TimeRange> unavailableTimesSet = new HashSet<>();
     for (Event e : events) {
       Collection<String> eventAttendees = e.getAttendees();
@@ -36,11 +37,17 @@ public final class FindMeetingQuery {
 
     List<TimeRange> unavailableTimesList = new ArrayList<>(unavailableTimesSet);
     Collections.sort(unavailableTimesList, TimeRange.ORDER_BY_START);
-    List<TimeRange> meetingTimes = new ArrayList<>();
+    return unavailableTimesList;
+  }
 
-    // search for possible meeting times 
+  /**
+   * Return list of possible meeting times based on the list of unavailable times and the duration of the desired meeting. 
+   */
+  private List<TimeRange> getMeetingTimes(List<TimeRange> unavailableTimes, long duration) {
+    List<TimeRange> meetingTimes = new ArrayList<>();
     int firstAvail = TimeRange.START_OF_DAY;
-    for (TimeRange t : unavailableTimesList) {
+
+    for (TimeRange t : unavailableTimes) {
       int start = t.start();
       int end = t.end();
       if (start - firstAvail >= duration) {
@@ -48,11 +55,27 @@ public final class FindMeetingQuery {
       }
       firstAvail = Math.max(end, firstAvail);
     }
-
     if (TimeRange.END_OF_DAY - firstAvail >= duration) {
       meetingTimes.add(TimeRange.fromStartEnd(firstAvail, TimeRange.END_OF_DAY, true));
     }
 
     return meetingTimes;
+  }
+
+  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<String> attendees = request.getAttendees();
+    Collection<String> optionalAttendees = request.getOptionalAttendees();
+    Collection<String> allAttendees = new HashSet<>();
+    allAttendees.addAll(attendees);
+    allAttendees.addAll(optionalAttendees);
+    long duration = request.getDuration();
+
+    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees);
+    List<TimeRange> unavailableTimesWithAllAttendees = getUnavailableTimes(events, allAttendees);
+    
+    List<TimeRange> meetingTimes = getMeetingTimes(unavailableTimes, duration);
+    List<TimeRange> meetingTimesWithAllAttendees = getMeetingTimes(unavailableTimesWithAllAttendees, duration);
+
+    return meetingTimesWithAllAttendees.size() == 0 && attendees.size() != 0 ? meetingTimes : meetingTimesWithAllAttendees;
   }
 }
