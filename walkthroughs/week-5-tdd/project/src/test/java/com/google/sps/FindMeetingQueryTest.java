@@ -419,7 +419,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void optimizeOptionalAttendeesNoGap() {
+  public void optimizeOptionalAttendeesNoGap_IncludeTwoOfThree() {
     // Optimize to schedule around the most optional attendees possible.
     // Query should accommodate Person C and D but not Person B. 
     //
@@ -451,7 +451,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void optimizeOptionalAttendeesNotEnoughRoom() {
+  public void optimizeOptionalAttendeesNotEnoughRoom_IncludeTwoOfThree() {
     // Optimize to schedule around the most optional attendees possible.
     // Query should accommodate Person C and B but there is not enough room to include Person D. 
     //
