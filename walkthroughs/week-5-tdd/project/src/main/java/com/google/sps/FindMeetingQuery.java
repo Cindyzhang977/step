@@ -62,6 +62,10 @@ public final class FindMeetingQuery {
     return meetingTimes;
   }
 
+  /**
+   * Return list of possible meeting times for all attendees if possible, otherwise returns list of  
+   * possible meeting times for only mandatory attendees.  
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
     Collection<String> optionalAttendees = request.getOptionalAttendees();
