@@ -18,15 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 public final class FindMeetingQuery {
 
   /** 
    * Return list of unavialable times to schedule the meeting. 
-   * List of TimeRanges is in sorted order from earliest to latest start time.
+   * List of TimeRanges is in sorted order based on the comparator. 
    */
-  private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees) {
+  private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees, Comparator<TimeRange> comparator) {
     HashSet<TimeRange> unavailableTimesSet = new HashSet<>();
     for (Event e : events) {
       Collection<String> eventAttendees = e.getAttendees();
@@ -36,7 +37,7 @@ public final class FindMeetingQuery {
     }
 
     List<TimeRange> unavailableTimesList = new ArrayList<>(unavailableTimesSet);
-    Collections.sort(unavailableTimesList, TimeRange.ORDER_BY_START);
+    Collections.sort(unavailableTimesList, comparator);
     return unavailableTimesList;
   }
 
@@ -62,24 +63,89 @@ public final class FindMeetingQuery {
     return meetingTimes;
   }
 
+  /** 
+   * Return an optimized version of possible meeting times that accommodates the maximum number of optional attendees. 
+   */
+  private List<TimeRange> getOptimiazedMeetingTimes(List<TimeRange> meetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
+    List<TimeRange> optimizedMeetingTimes = new ArrayList<>();
+    
+    for (int i = 0; i < meetingTimes.size(); i++) {
+      TimeRange meetingSlot = meetingTimes.get(i);
+      boolean canSkipRange = false;
+      for (TimeRange t : unavailableTimesOptionalAttendees) {
+        int start = t.start();
+        int end = t.end();
+
+        // meeting slot is not added to optimizedMeetingtimes if optional time is the same as meeting slot 
+        // and there are other range options still available 
+        int numSlotsUnconsidered = meetingTimes.size() - i - 1;
+        if (t.equals(meetingSlot) && optimizedMeetingTimes.size() + numSlotsUnconsidered > 0) {
+          canSkipRange = true;
+          continue;
+        }
+
+        // move on to next optional time range if current t is out of range of original meeting slot 
+        if (!t.overlaps(meetingSlot) || t.contains(meetingSlot)) {
+          continue;
+        }
+
+        // update possible time range
+        List<TimeRange> possibleTimes = getPossibleTimeRanges(meetingSlot, t, duration);
+        if (possibleTimes.size() == 0) {
+          continue;
+        } else if (possibleTimes.size() == 2) {
+          optimizedMeetingTimes.add(possibleTimes.get(0));
+          meetingSlot = possibleTimes.get(1);
+        } else {
+          meetingSlot = possibleTimes.get(0);
+        }
+      }
+      // add possible time range to optimized meeting times
+      if (!canSkipRange) {
+        optimizedMeetingTimes.add(meetingSlot);
+      } 
+    }
+
+    return optimizedMeetingTimes;
+  }
+
   /**
-   * Return list of possible meeting times for all attendees if possible, otherwise returns list of  
-   * possible meeting times for only mandatory attendees.  
+   * Return a list of meeting TimeRanges that accommodates the optionalTime slot into meetingSlot if possible. 
+   * MeetingSlot and optionalTime overlap, and meetingSlot is not a subrange of optionalTime. 
+   */
+  private List<TimeRange> getPossibleTimeRanges(TimeRange meetingSlot, TimeRange optionalTime, long duration) {
+    int meetingStart = meetingSlot.start();
+    int meetingEnd = meetingSlot.end();
+    int optionalStart = optionalTime.start();
+    int optionalEnd = optionalTime.end();
+
+    List<TimeRange> options = new ArrayList<>();
+
+    if (optionalStart - meetingStart >= duration) {
+      options.add(TimeRange.fromStartEnd(meetingStart, optionalStart, false));
+    } 
+    if (meetingEnd - optionalEnd >= duration) {
+      options.add(TimeRange.fromStartEnd(optionalEnd, meetingEnd, meetingEnd == TimeRange.END_OF_DAY));
+    }
+    
+    return options;
+  }
+
+  /**
+   * Return list of possible meeting times optimized to include as many optional attendees as possible in 
+   * addition to mandatory attendees.  
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
     Collection<String> optionalAttendees = request.getOptionalAttendees();
-    Collection<String> allAttendees = new HashSet<>();
-    allAttendees.addAll(attendees);
-    allAttendees.addAll(optionalAttendees);
     long duration = request.getDuration();
 
-    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees);
-    List<TimeRange> unavailableTimesWithAllAttendees = getUnavailableTimes(events, allAttendees);
+    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees, TimeRange.ORDER_BY_START);
+    List<TimeRange> unavailableTimesOptionalAttendees = getUnavailableTimes(events, optionalAttendees, TimeRange.ORDER_BY_END);
     
     List<TimeRange> meetingTimes = getMeetingTimes(unavailableTimes, duration);
-    List<TimeRange> meetingTimesWithAllAttendees = getMeetingTimes(unavailableTimesWithAllAttendees, duration);
+    List<TimeRange> optimizedMeetingTimes = getOptimiazedMeetingTimes(meetingTimes, unavailableTimesOptionalAttendees, duration);
 
-    return meetingTimesWithAllAttendees.size() == 0 && attendees.size() != 0 ? meetingTimes : meetingTimesWithAllAttendees;
+    return optimizedMeetingTimes;
   }
 }
