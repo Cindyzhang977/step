@@ -297,7 +297,7 @@ public final class FindMeetingQueryTest {
     // The optional attendee should be ignored since considering their schedule would result in a time slot smaller than the requested time.
     //
     // Events  : |--A--|     |----A----|
-    //              |--B--|
+    //                 |-B-|
     // Day     : |---------------------|
     // Options :       |-----|
 
