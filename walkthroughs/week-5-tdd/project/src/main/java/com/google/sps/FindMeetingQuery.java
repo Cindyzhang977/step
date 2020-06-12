@@ -99,15 +99,9 @@ public final class FindMeetingQuery {
         }
 
         // update possible time range
-        List<TimeRange> possibleTimes = getPossibleTimeRanges(meetingSlot, t, duration);
-        if (possibleTimes.size() == 0) { // TODO: move to getPossibleTimeRanges
-          continue;
-        } else if (possibleTimes.size() == 2) {
-          optimizedMeetingTimes.add(possibleTimes.get(0));
-          meetingSlot = possibleTimes.get(1);
-        } else {
-          meetingSlot = possibleTimes.get(0);
-        }
+        TimeRange possibleTime = getPossibleTimeRange(meetingSlot, t, duration, optimizedMeetingTimes);
+        meetingSlot = possibleTime != null ? possibleTime : meetingSlot;
+        
       }
       // add possible time range to optimized meeting times
       if (!canSkipRange) {
@@ -119,29 +113,32 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Return a list of meeting TimeRanges that accommodates the optionalTime slot into meetingSlot if possible. 
+   * Return a meeting TimeRange that accommodates the optionalTime slot into meetingSlot if possible. 
+   * If two meeting TimeRanges are possible, at the first one to optimizedMeetingTimes 
    * MeetingSlot and optionalTime overlap, and meetingSlot is not a subrange of optionalTime. 
    * @param meetingSlot available meeting slot to schedule the meeting
    * @param optionalTime an optional attendee's unavailability to try to accommodate
    * @param duration length of meeting 
-   * @return a new meeting time range if @param optionalTime can be accommodated, else null  
+   * @return a new meeting TimeRange if @param optionalTime can be accommodated, else null  
    */
-  private List<TimeRange> getPossibleTimeRanges(TimeRange meetingSlot, TimeRange optionalTime, long duration) {
+  private TimeRange getPossibleTimeRange(TimeRange meetingSlot, TimeRange optionalTime, long duration, List<TimeRange> optimizedMeetingTimes) {
     int meetingStart = meetingSlot.start();
     int meetingEnd = meetingSlot.end();
     int optionalStart = optionalTime.start();
     int optionalEnd = optionalTime.end();
 
-    List<TimeRange> options = new ArrayList<>();
-
+    TimeRange option = null;
     if (optionalStart - meetingStart >= duration) {
-      options.add(TimeRange.fromStartEnd(meetingStart, optionalStart, false));
+      option = TimeRange.fromStartEnd(meetingStart, optionalStart, false);
     } 
     if (meetingEnd - optionalEnd >= duration) {
-      options.add(TimeRange.fromStartEnd(optionalEnd, meetingEnd, meetingEnd == TimeRange.END_OF_DAY));
+      if (option != null) {
+        optimizedMeetingTimes.add(option);
+      }
+      option = TimeRange.fromStartEnd(optionalEnd, meetingEnd, meetingEnd == TimeRange.END_OF_DAY);
     }
     
-    return options;
+    return option;
   }
 
   /**
