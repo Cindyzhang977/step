@@ -26,6 +26,8 @@ public final class FindMeetingQuery {
   /** 
    * Return list of unavialable times to schedule the meeting. 
    * List of TimeRanges is in sorted order based on the comparator. 
+   * @param events collection of events to consider for @param attendees unavailable times
+   * @param comparator the comparator function used to sort @return list of unavailable times
    */
   private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees, Comparator<TimeRange> comparator) {
     HashSet<TimeRange> unavailableTimesSet = new HashSet<>();
@@ -43,6 +45,9 @@ public final class FindMeetingQuery {
 
   /**
    * Return list of possible meeting times based on the list of unavailable times and the duration of the desired meeting. 
+   * @param unavailableTimes list of unavailable times where a meeting cannot be scheduled
+   * @param duration length of the meeting
+   * @return list of possible meeting times
    */
   private List<TimeRange> getMeetingTimes(List<TimeRange> unavailableTimes, long duration) {
     List<TimeRange> meetingTimes = new ArrayList<>();
@@ -65,6 +70,10 @@ public final class FindMeetingQuery {
 
   /** 
    * Return an optimized version of possible meeting times that accommodates the maximum number of optional attendees. 
+   * @param meetingTimes available meeting slots where only mandatory attendees are considered 
+   * @param unavailableTimesOptionalAttendees unavailable times for optional attendees 
+   * @param duration the duration of the meeting to be scheduled 
+   * @return an optimized list of meeting times that would include the maximum number of attendees 
    */
   private List<TimeRange> getOptimiazedMeetingTimes(List<TimeRange> meetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
     List<TimeRange> optimizedMeetingTimes = new ArrayList<>();
@@ -81,7 +90,7 @@ public final class FindMeetingQuery {
         int numSlotsUnconsidered = meetingTimes.size() - i - 1;
         if (t.equals(meetingSlot) && optimizedMeetingTimes.size() + numSlotsUnconsidered > 0) {
           canSkipRange = true;
-          continue;
+          break;
         }
 
         // move on to next optional time range if current t is out of range of original meeting slot 
@@ -91,7 +100,7 @@ public final class FindMeetingQuery {
 
         // update possible time range
         List<TimeRange> possibleTimes = getPossibleTimeRanges(meetingSlot, t, duration);
-        if (possibleTimes.size() == 0) {
+        if (possibleTimes.size() == 0) { // TODO: move to getPossibleTimeRanges
           continue;
         } else if (possibleTimes.size() == 2) {
           optimizedMeetingTimes.add(possibleTimes.get(0));
@@ -112,6 +121,10 @@ public final class FindMeetingQuery {
   /**
    * Return a list of meeting TimeRanges that accommodates the optionalTime slot into meetingSlot if possible. 
    * MeetingSlot and optionalTime overlap, and meetingSlot is not a subrange of optionalTime. 
+   * @param meetingSlot available meeting slot to schedule the meeting
+   * @param optionalTime an optional attendee's unavailability to try to accommodate
+   * @param duration length of meeting 
+   * @return a new meeting time range if @param optionalTime can be accommodated, else null  
    */
   private List<TimeRange> getPossibleTimeRanges(TimeRange meetingSlot, TimeRange optionalTime, long duration) {
     int meetingStart = meetingSlot.start();
@@ -134,6 +147,8 @@ public final class FindMeetingQuery {
   /**
    * Return list of possible meeting times optimized to include as many optional attendees as possible in 
    * addition to mandatory attendees.  
+   * @param events list of events to consider for the attendees requested for the meeting in @param request
+   * @return optimized list of meeting times where ranges accommodate the maximum number of optional attendees
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();

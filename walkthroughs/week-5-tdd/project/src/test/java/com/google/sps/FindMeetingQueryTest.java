@@ -135,7 +135,7 @@ public final class FindMeetingQueryTest {
     // The same three time slots should be returned as when C was not invited.
     //
     // Events  :       |--A--|     |--B--|
-    //           |--------------C--------------|
+    // Optional: |--------------C--------------|
     // Day     : |-----------------------------|
     // Options : |--1--|     |--2--|     |--3--|
 
@@ -166,7 +166,7 @@ public final class FindMeetingQueryTest {
     // Now only the early and late parts of the day should be returned.
     //
     // Events  :       |--A--|     |--B--|
-    //                       |--C--|
+    // Optional:             |--C--|
     // Day     : |-----------------------------|
     // Options : |--1--|                 |--3--|
 
@@ -298,7 +298,7 @@ public final class FindMeetingQueryTest {
     // The optional attendee should be ignored since considering their schedule would result in a time slot smaller than the requested time.
     //
     // Events  : |--A--|     |----A----|
-    //                 |-B-|
+    // Optional:       |-B-|
     // Day     : |---------------------|
     // Options :       |-----|
 
@@ -400,7 +400,7 @@ public final class FindMeetingQueryTest {
     // No mandatory attendees, just two optional attendees with no gaps in their schedules. 
     // Query should return that no time is available.
     //
-    // Events  : |--A--|  
+    // Optional: |--A--|  
     //                |--------B-------|
     // Day     : |---------------------|
     // Options :     
@@ -426,7 +426,7 @@ public final class FindMeetingQueryTest {
     // Query should accommodate Person B and D but not Person C. 
     //
     // Events  : |--A--|  
-    //                |---B---|     |-B|
+    // Optional:      |---B---|     |-B|
     //                        |--C--|
     //                              |-D|
     // Day     : |---------------------|
@@ -458,7 +458,7 @@ public final class FindMeetingQueryTest {
     // Query should accommodate Person C and B but there is not enough room to include Person D. 
     //
     // Events  : |--A--|        |-A-|
-    //                              |-B|
+    // Optional:                    |-B|
     //                          |-C-|
     //               |---D---|
     // Day     : |---------------------|
@@ -482,5 +482,33 @@ public final class FindMeetingQueryTest {
     Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartEnd(TIME_0900AM, TIME_0500PM, false));
 
     Assert.assertEquals(expected, actual);   
+  }
+
+   @Test
+  public void optimizeOptionalAttendees_NoChangeFromMandatory() {
+    // Optimize to schedule around the most optional attendees possible.
+    // Query should accommodate all optional attendees. 
+    //
+    // Events  : |--A--|        |-A-|
+    // Optional:                   |-C-|
+    //           |-B-|
+    // Day     : |---------------------|
+    // Options :       |--------|  
+    Collection<Event> events = Arrays.asList(
+          new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0900AM, false),
+              Arrays.asList(PERSON_A)),
+          new Event("Event 2", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
+              Arrays.asList(PERSON_B)),
+          new Event("Event 3", TimeRange.fromStartEnd(TIME_0500PM, TIME_1000PM, false),
+              Arrays.asList(PERSON_A, PERSON_C)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_4_HOUR);
+    request.addOptionalAttendee(PERSON_B);    
+    request.addOptionalAttendee(PERSON_C);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartEnd(TIME_0900AM, TIME_0500PM, false));
+
+    Assert.assertEquals(expected, actual); 
   }
 }
