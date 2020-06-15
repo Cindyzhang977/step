@@ -26,12 +26,12 @@ public class Interval {
   private TimeRange timerange; 
 
   /**
-   * A comparator for sorting intervals by their start time in ascending order.
+   * A comparator for sorting intervals by their start time in descending order.
    */
-  public static final Comparator<Interval> ORDER_BY_START = new Comparator<Interval>() {
+  public static final Comparator<Interval> ORDER_BY_LATEST_START = new Comparator<Interval>() {
     @Override
     public int compare(Interval a, Interval b) {
-      return Long.compare(a.start, b.start);
+      return Long.compare(b.start, a.start);
     }
   };
 
@@ -42,11 +42,28 @@ public class Interval {
     this.numUnavailable = numUnavailable;
   }
 
+  public Interval(int start, int end, int numUnavailable) {
+    this(TimeRange.fromStartEnd(start, end, end == TimeRange.END_OF_DAY), numUnavailable);
+  }
+
   public int getNumUnavailable() {
     return this.numUnavailable;
   }
 
   public TimeRange getTimeRange() {
     return this.timerange;
+  }
+
+  public int start() {
+    return this.start;
+  }
+
+  public int end() {
+    return this.end;
+  }
+
+  @Override
+  public String toString() {
+    return this.timerange + ", numUnavailable: " + this.numUnavailable;
   }
 }

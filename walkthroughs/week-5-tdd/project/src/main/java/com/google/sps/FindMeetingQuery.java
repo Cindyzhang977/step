@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Stack;
 
 public final class FindMeetingQuery {
 
@@ -29,17 +30,20 @@ public final class FindMeetingQuery {
    * @param events collection of events to consider for @param attendees unavailable times
    * @param comparator the comparator function used to sort @return list of unavailable times
    */
-  private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees, Comparator<TimeRange> comparator) {
-    HashSet<TimeRange> unavailableTimesSet = new HashSet<>();
+  private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees) {
+    List<TimeRange> unavailableTimesList = new ArrayList<>();
     for (Event e : events) {
       Collection<String> eventAttendees = e.getAttendees();
       if (!Collections.disjoint(eventAttendees, attendees)) {
-        unavailableTimesSet.add(e.getWhen());
+        HashSet<String> intersection = new HashSet<>(eventAttendees);
+        intersection.retainAll(attendees);
+        for (int i = 0; i < intersection.size(); i++) {
+          unavailableTimesList.add(e.getWhen());
+        }
       }
     }
 
-    List<TimeRange> unavailableTimesList = new ArrayList<>(unavailableTimesSet);
-    Collections.sort(unavailableTimesList, comparator);
+    Collections.sort(unavailableTimesList, TimeRange.ORDER_BY_START);
     return unavailableTimesList;
   }
 
@@ -75,70 +79,62 @@ public final class FindMeetingQuery {
    * @param duration the duration of the meeting to be scheduled 
    * @return an optimized list of meeting times that would include the maximum number of attendees 
    */
-  private List<TimeRange> getOptimiazedMeetingTimes(List<TimeRange> meetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
-    List<TimeRange> optimizedMeetingTimes = new ArrayList<>();
-    
-    for (int i = 0; i < meetingTimes.size(); i++) {
-      TimeRange meetingSlot = meetingTimes.get(i);
-      boolean canSkipRange = false;
-      for (TimeRange t : unavailableTimesOptionalAttendees) {
-        int start = t.start();
-        int end = t.end();
+  private List<TimeRange> getOptimizedMeetingTimes(List<TimeRange> meetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
+    Stack<Interval> optimizedMeetingTimes = new Stack<>();
+    int minUnvailable = Integer.MAX_VALUE;
 
-        // meeting slot is not added to optimizedMeetingtimes if optional time is the same as meeting slot 
-        // and there are other range options still available 
-        int numSlotsUnconsidered = meetingTimes.size() - i - 1;
-        if (t.equals(meetingSlot) && optimizedMeetingTimes.size() + numSlotsUnconsidered > 0) {
-          canSkipRange = true;
-          break;
-        }
-
-        // move on to next optional time range if current t is out of range of original meeting slot 
-        if (!t.overlaps(meetingSlot) || t.contains(meetingSlot)) {
-          continue;
-        }
-
-        // update possible time range
-        TimeRange possibleTime = getPossibleTimeRange(meetingSlot, t, duration, optimizedMeetingTimes);
-        meetingSlot = possibleTime != null ? possibleTime : meetingSlot;
-        
-      }
-      // add possible time range to optimized meeting times
-      if (!canSkipRange) {
-        optimizedMeetingTimes.add(meetingSlot);
-      } 
+    MeetingRanges meetingRanges = new MeetingRanges(meetingTimes);
+    for (TimeRange t : unavailableTimesOptionalAttendees) {
+      meetingRanges.add(t);
     }
 
-    return optimizedMeetingTimes;
-  }
+    Stack<Interval> meetingStack = meetingRanges.asStack();
+    while (!meetingStack.empty()) {
+      Interval interval = meetingStack.pop(); 
+      TimeRange t = interval.getTimeRange();
+      int intervalLength = t.duration();
+      int numUnavailable = interval.getNumUnavailable();
 
-  /**
-   * Return a meeting TimeRange that accommodates the optionalTime slot into meetingSlot if possible. 
-   * If two meeting TimeRanges are possible, at the first one to optimizedMeetingTimes 
-   * MeetingSlot and optionalTime overlap, and meetingSlot is not a subrange of optionalTime. 
-   * @param meetingSlot available meeting slot to schedule the meeting
-   * @param optionalTime an optional attendee's unavailability to try to accommodate
-   * @param duration length of meeting 
-   * @return a new meeting TimeRange if @param optionalTime can be accommodated, else null  
-   */
-  private TimeRange getPossibleTimeRange(TimeRange meetingSlot, TimeRange optionalTime, long duration, List<TimeRange> optimizedMeetingTimes) {
-    int meetingStart = meetingSlot.start();
-    int meetingEnd = meetingSlot.end();
-    int optionalStart = optionalTime.start();
-    int optionalEnd = optionalTime.end();
-
-    TimeRange option = null;
-    if (optionalStart - meetingStart >= duration) {
-      option = TimeRange.fromStartEnd(meetingStart, optionalStart, false);
-    } 
-    if (meetingEnd - optionalEnd >= duration) {
-      if (option != null) {
-        optimizedMeetingTimes.add(option);
+      // push intervals when a meeting could be scheduled onto optimizedMeetingTimes 
+      // update minUnavailable and clear optimizedMeetingTimes when a more optimal solution is found
+      if (intervalLength >= duration && numUnavailable == minUnvailable) {
+        optimizedMeetingTimes.push(interval);
+      } else if (intervalLength >= duration && numUnavailable < minUnvailable) {
+        optimizedMeetingTimes = new Stack<>();
+        optimizedMeetingTimes.push(interval);
+        minUnvailable = numUnavailable;
       }
-      option = TimeRange.fromStartEnd(optionalEnd, meetingEnd, meetingEnd == TimeRange.END_OF_DAY);
+
+      // append interval to an adjacent slot if it is shorter than duration and has less than or equal to the 
+      // number of unavailable attendees as an adjacent slot 
+      if (intervalLength < duration) {
+        if (!optimizedMeetingTimes.empty()){
+          Interval prev = optimizedMeetingTimes.peek();
+          if (prev.end() == interval.start() && prev.getNumUnavailable() >= numUnavailable) {
+            optimizedMeetingTimes.pop();
+            optimizedMeetingTimes.push(new Interval(TimeRange.fromStartEnd(prev.start(), interval.end(), interval.end() == TimeRange.END_OF_DAY), prev.getNumUnavailable()));
+          }
+        }
+        if (!meetingStack.empty()) {
+          Interval next = meetingStack.peek();
+          if (next.start() == interval.end() && next.getTimeRange().duration() < duration) {
+            meetingStack.pop();
+            meetingStack.push(new Interval(interval.start(), next.end(), Math.max(next.getNumUnavailable(), numUnavailable)));
+          } else if (next.start() == interval.end() && next.getNumUnavailable() >= numUnavailable) {
+            meetingStack.pop();
+            meetingStack.push(new Interval(interval.start(), next.end(), next.getNumUnavailable()));
+          }
+        }
+      }
     }
-    
-    return option;
+
+    // take timeranges from meetingStack to add the list of optimal meeting times
+    List<TimeRange> optMeetingTimesList = new ArrayList<>();
+    for (Interval interval : optimizedMeetingTimes) {
+      optMeetingTimesList.add(interval.getTimeRange());
+    }
+
+    return optMeetingTimesList.size() == 0 ? meetingTimes : optMeetingTimesList;
   }
 
   /**
@@ -152,11 +148,11 @@ public final class FindMeetingQuery {
     Collection<String> optionalAttendees = request.getOptionalAttendees();
     long duration = request.getDuration();
 
-    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees, TimeRange.ORDER_BY_START);
-    List<TimeRange> unavailableTimesOptionalAttendees = getUnavailableTimes(events, optionalAttendees, TimeRange.ORDER_BY_END);
+    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees);
+    List<TimeRange> unavailableTimesOptionalAttendees = getUnavailableTimes(events, optionalAttendees);
     
     List<TimeRange> meetingTimes = getMeetingTimes(unavailableTimes, duration);
-    List<TimeRange> optimizedMeetingTimes = getOptimiazedMeetingTimes(meetingTimes, unavailableTimesOptionalAttendees, duration);
+    List<TimeRange> optimizedMeetingTimes = getOptimizedMeetingTimes(meetingTimes, unavailableTimesOptionalAttendees, duration);
 
     return optimizedMeetingTimes;
   }
