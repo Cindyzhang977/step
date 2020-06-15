@@ -33,13 +33,13 @@ public class MeetingRanges {
    */
   public MeetingRanges(List<TimeRange> meetingRanges) {
     for (TimeRange t : meetingRanges) {
-      intervals.add(new Interval(t, 1));
+      intervals.add(new Interval(t, 0));
     }
   }
 
   /**
-   * Add an interval to accomodate into intervals. Only keep range that is in bounds with possible meeting times. 
-   * Update numOccurrence for overlaps. 
+   * Add an interval to accomodate into intervals. Only keep intervals that is in bounds with possible meeting times. 
+   * Update numAvailable for overlaps. 
    */
   public void add(TimeRange timerange) {
     Iterator<Interval> intervalIter = intervals.iterator();
@@ -51,7 +51,7 @@ public class MeetingRanges {
         intervals.remove(i);
 
         if (t.equals(timerange)) {
-          intervals.add(new Interval(t, i.getNumOccurrences() + 1));
+          intervals.add(new Interval(t, i.getNumUnavailable() + 1));
         } else if (!timerange.contains(t)) {
           int timerangeStart = timerange.start();
           int timerangeEnd = timerange.end();
@@ -59,21 +59,21 @@ public class MeetingRanges {
           int tEnd = t.end();
 
           if (t.contains(timerange)) {
-            // |-------- t -------|
-            //   |- timerange -|
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumOccurrences());
-            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumOccurrences());
-            intervals.add(timerange, i.getNumOccurrences() + 1);
+            // |---------- t ---------|
+            //     |- timerange -|
+            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable());
+            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable());
+            intervals.add(timerange, i.getNumUnavailable() + 1);
           } else if (timerangeStart >= tStart && timerangeEnd > tEnd) {
             // |----- t ----|
             //      |-- timerange --|
-            intervals.add(TimeRange.fromStartEnd(timerangeStart, tEnd, false), i.getNumOccurrences() + 1);
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumOccurrences());
+            intervals.add(TimeRange.fromStartEnd(timerangeStart, tEnd, false), i.getNumUnavailable() + 1);
+            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable());
           } else if (timerangeStart < tStart && timerangeEnd <= tEnd) {
             //         |--- t ---|
             // |-- timerange --|
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeEnd, false), i.getNumOccurrences() + 1);
-            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumOccurrences());
+            intervals.add(TimeRange.fromStartEnd(tStart, timerangeEnd, false), i.getNumUnavailable() + 1);
+            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable());
           }
         }
       }

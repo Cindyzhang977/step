@@ -17,12 +17,12 @@ package com.google.sps;
 import java.util.Comparator;
 
 /**
-  * Class encapsulating a TimeRange and the number of occurrences of the TimeRange.
+  * Class encapsulating a TimeRange and the number of attendees unavailable during that time.
   */
 public class Interval {
   private int start;
   private int end;
-  private int numOccurrences;
+  private int numUnavailable;
   private TimeRange timerange; 
 
   /**
@@ -35,15 +35,15 @@ public class Interval {
     }
   };
 
-  public Interval(TimeRange timerange, int numOccurrences) {
+  public Interval(TimeRange timerange, int numUnavailable) {
     this.start = timerange.start();
     this.end = timerange.end();
     this.timerange = timerange;
-    this.numOccurrences = numOccurrences;
+    this.numUnavailable = numUnavailable;
   }
 
-  public int getNumOccurrences() {
-    return this.numOccurrences;
+  public int getNumUnavailable() {
+    return this.numUnavailable;
   }
 
   public TimeRange getTimeRange() {
