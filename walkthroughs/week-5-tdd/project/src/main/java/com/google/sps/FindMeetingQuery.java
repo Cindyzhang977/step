@@ -24,9 +24,29 @@ import java.util.Stack;
 
 public final class FindMeetingQuery {
 
+  /**
+   * Return list of possible meeting times optimized to include as many optional attendees as possible in 
+   * addition to mandatory attendees.  
+   *
+   * @param events list of events to consider for the attendees requested for the meeting in @param request
+   * @return optimized list of meeting times where ranges accommodate the maximum number of optional attendees
+   */
+  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<String> attendees = request.getAttendees();
+    Collection<String> optionalAttendees = request.getOptionalAttendees();
+    long duration = request.getDuration();
+
+    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees);
+    List<TimeRange> unavailableTimesOptionalAttendees = getUnavailableTimes(events, optionalAttendees);
+    List<TimeRange> meetingTimes = getMeetingTimes(unavailableTimes, duration);
+    
+    return getMaximallyAccommodatedMeetingTimes(meetingTimes, unavailableTimesOptionalAttendees, duration);
+  }
+
   /** 
    * Return list of unavialable times to schedule the meeting. 
    * List of TimeRanges is in sorted order based on the comparator. 
+   *
    * @param events collection of events to consider for @param attendees unavailable times
    * @param comparator the comparator function used to sort @return list of unavailable times
    */
@@ -49,6 +69,7 @@ public final class FindMeetingQuery {
 
   /**
    * Return list of possible meeting times based on the list of unavailable times and the duration of the desired meeting. 
+   * 
    * @param unavailableTimes list of unavailable times where a meeting cannot be scheduled
    * @param duration length of the meeting
    * @return list of possible meeting times
@@ -74,16 +95,17 @@ public final class FindMeetingQuery {
 
   /** 
    * Return an optimized version of possible meeting times that accommodates the maximum number of optional attendees. 
-   * @param meetingTimes available meeting slots where only mandatory attendees are considered 
+   *
+   * @param availableMeetingTimes available meeting slots where only mandatory attendees are considered 
    * @param unavailableTimesOptionalAttendees unavailable times for optional attendees 
    * @param duration the duration of the meeting to be scheduled 
    * @return an optimized list of meeting times that would include the maximum number of attendees 
    */
-  private List<TimeRange> getOptimizedMeetingTimes(List<TimeRange> meetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
+  private List<TimeRange> getMaximallyAccommodatedMeetingTimes(List<TimeRange> availableMeetingTimes, List<TimeRange> unavailableTimesOptionalAttendees, long duration) {
     Stack<Interval> optimizedMeetingTimes = new Stack<>();
     int minUnvailable = Integer.MAX_VALUE;
 
-    MeetingRanges meetingRanges = new MeetingRanges(meetingTimes);
+    MeetingRanges meetingRanges = new MeetingRanges(availableMeetingTimes);
     for (TimeRange t : unavailableTimesOptionalAttendees) {
       meetingRanges.add(t);
     }
@@ -134,26 +156,6 @@ public final class FindMeetingQuery {
       optMeetingTimesList.add(interval.getTimeRange());
     }
 
-    return optMeetingTimesList.size() == 0 ? meetingTimes : optMeetingTimesList;
-  }
-
-  /**
-   * Return list of possible meeting times optimized to include as many optional attendees as possible in 
-   * addition to mandatory attendees.  
-   * @param events list of events to consider for the attendees requested for the meeting in @param request
-   * @return optimized list of meeting times where ranges accommodate the maximum number of optional attendees
-   */
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    Collection<String> attendees = request.getAttendees();
-    Collection<String> optionalAttendees = request.getOptionalAttendees();
-    long duration = request.getDuration();
-
-    List<TimeRange> unavailableTimes = getUnavailableTimes(events, attendees);
-    List<TimeRange> unavailableTimesOptionalAttendees = getUnavailableTimes(events, optionalAttendees);
-    
-    List<TimeRange> meetingTimes = getMeetingTimes(unavailableTimes, duration);
-    List<TimeRange> optimizedMeetingTimes = getOptimizedMeetingTimes(meetingTimes, unavailableTimesOptionalAttendees, duration);
-
-    return optimizedMeetingTimes;
+    return optMeetingTimesList.size() == 0 ? availableMeetingTimes : optMeetingTimesList;
   }
 }
