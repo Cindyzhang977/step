@@ -43,7 +43,7 @@ public class MeetingRanges {
    */
   public void add(TimeRange timerange) {
     Iterator<Interval> intervalIter = intervals.iterator();
-    while intervalIter.hasNext() {
+    while (intervalIter.hasNext()) {
       Interval i = intervalIter.next();
       TimeRange t = i.getTimeRange();
       
@@ -61,19 +61,19 @@ public class MeetingRanges {
           if (t.contains(timerange)) {
             // |---------- t ---------|
             //     |- timerange -|
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable());
-            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable());
-            intervals.add(timerange, i.getNumUnavailable() + 1);
+            intervals.add(new Interval(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable()));
+            intervals.add(new Interval(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable()));
+            intervals.add(new Interval(timerange, i.getNumUnavailable() + 1));
           } else if (timerangeStart >= tStart && timerangeEnd > tEnd) {
             // |----- t ----|
             //      |-- timerange --|
-            intervals.add(TimeRange.fromStartEnd(timerangeStart, tEnd, false), i.getNumUnavailable() + 1);
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable());
+            intervals.add(new Interval(TimeRange.fromStartEnd(timerangeStart, tEnd, false), i.getNumUnavailable() + 1));
+            intervals.add(new Interval(TimeRange.fromStartEnd(tStart, timerangeStart, false), i.getNumUnavailable()));
           } else if (timerangeStart < tStart && timerangeEnd <= tEnd) {
             //         |--- t ---|
             // |-- timerange --|
-            intervals.add(TimeRange.fromStartEnd(tStart, timerangeEnd, false), i.getNumUnavailable() + 1);
-            intervals.add(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable());
+            intervals.add(new Interval(TimeRange.fromStartEnd(tStart, timerangeEnd, false), i.getNumUnavailable() + 1));
+            intervals.add(new Interval(TimeRange.fromStartEnd(timerangeEnd, tEnd, tEnd == TimeRange.END_OF_DAY), i.getNumUnavailable()));
           }
         }
       }
@@ -84,7 +84,7 @@ public class MeetingRanges {
    * Return list of meeting intervals ordered by earliest start time.  
    */
   public List<Interval> asList() {
-    List<Interval> = new ArrayList<>(intervals);
+    List<Interval> intervalsList = new ArrayList<>(intervals);
     Collections.sort(intervalsList, Interval.ORDER_BY_START);
     return intervalsList;
   }
