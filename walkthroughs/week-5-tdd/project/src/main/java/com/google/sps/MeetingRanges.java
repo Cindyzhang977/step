@@ -17,7 +17,6 @@ package com.google.sps;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.HashSet;
 
@@ -42,9 +41,8 @@ public class MeetingRanges {
    * Update numAvailable for overlaps. 
    */
   public void add(TimeRange timerange) {
-    Iterator<Interval> intervalIter = intervals.iterator();
-    while (intervalIter.hasNext()) {
-      Interval i = intervalIter.next();
+    HashSet<Interval> intervalsCopy = (HashSet) intervals.clone();
+    for (Interval i : intervalsCopy) {
       TimeRange t = i.getTimeRange();
       
       if (t.overlaps(timerange)) {
