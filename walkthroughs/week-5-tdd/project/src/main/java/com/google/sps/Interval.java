@@ -31,7 +31,7 @@ public class Interval {
   public static final Comparator<Interval> ORDER_BY_START = new Comparator<Interval>() {
     @Override
     public int compare(Interval a, Interval b) {
-      return TimeRange.compare(a.start, b.start);
+      return Long.compare(a.start, b.start);
     }
   };
 
