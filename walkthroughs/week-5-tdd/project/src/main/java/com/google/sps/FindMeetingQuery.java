@@ -44,11 +44,11 @@ public final class FindMeetingQuery {
   }
 
   /** 
-   * Return list of unavialable times to schedule the meeting. 
-   * List of TimeRanges is in sorted order based on the comparator. 
+   * Return list of unavialable times to schedule the meeting, sorted by earliest start time. 
    *
-   * @param events collection of events to consider for @param attendees unavailable times
-   * @param comparator the comparator function used to sort @return list of unavailable times
+   * @param events collection of events to consider to schedule around
+   * @param attendees the people of which to get unavailable times 
+   * @return list of unavailable times
    */
   private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees) {
     List<TimeRange> unavailableTimesList = new ArrayList<>();
