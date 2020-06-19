@@ -26,7 +26,7 @@ import java.util.Stack;
  */
 public class MeetingRanges {
 
-  private static HashSet<Interval> intervals;
+  private HashSet<Interval> intervals;
 
   /**
    * Add the intervals that indicate possible meeting times for a meeting to be scheduled, initiate MeetingRanges.

@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public final class FindMeetingQuery {
@@ -53,13 +54,11 @@ public final class FindMeetingQuery {
   private List<TimeRange> getUnavailableTimes(Collection<Event> events, Collection<String> attendees) {
     List<TimeRange> unavailableTimesList = new ArrayList<>();
     for (Event e : events) {
-      Collection<String> eventAttendees = e.getAttendees();
-      if (!Collections.disjoint(eventAttendees, attendees)) {
-        HashSet<String> intersection = new HashSet<>(eventAttendees);
-        intersection.retainAll(attendees);
-        for (int i = 0; i < intersection.size(); i++) {
-          unavailableTimesList.add(e.getWhen());
-        }
+      Set<String> eventAttendees = e.getAttendees();
+      Set<String> intersection = new HashSet<>(eventAttendees);
+      intersection.retainAll(attendees);
+      for (int i = 0; i < intersection.size(); i++) {
+        unavailableTimesList.add(e.getWhen());
       }
     }
 
